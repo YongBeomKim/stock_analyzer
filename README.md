@@ -22,10 +22,11 @@
 
 ## 계획 및 진행과정  
 
-1. 백엔드서버 구축  
-2. DB 연동  
-3. 네이버 금융 주가 데이터 크롤링  
-3-1. CRUD 테스트 : MongoDB vs ElasticSearch  
-4. 프론트엔드 뷰 구축  
-5. Logistic Regression 적용  
-6. 데이터 시각화  
+### 1. 백엔드서버 구축  
+### 2. DB 연동  
+### 3. 네이버 금융 주가 데이터 크롤링  
+#### 3-1. CRUD 테스트 : MongoDB vs ElasticSearch  
+### 4. 프론트엔드 뷰 구축  
+### 5. Logistic Regression 적용  
+### 6. 데이터 시각화  
+### 7. 다른 머신러닝 모델 적용 및 
