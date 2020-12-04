@@ -4,7 +4,7 @@
 위의 두 가지 기능을 중점으로 하는 웹 사이트를 목표로 합니다.
 
 ## 사용될 스택
-- Django  
+- Django & DRF (Django Rest Framework)  
 >> 백엔드서버로써 사용합니다.  
 
 - React.js
@@ -33,6 +33,12 @@ django 프로젝트는 여러 app들로 구성되어 있다. 즉, 프로젝트�
 ```
 python manage.py startapp stock_inquiry
 python manage.py startapp stock_prediction
+```  
+
+2020-12-04 : API 서버로 사용할 rest_api 앱도 생성한다.  
+
+```
+python manage.py startapp rest_api
 ```
 
 #### 1-2 뷰 설계  
