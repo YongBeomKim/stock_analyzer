@@ -42,6 +42,7 @@ python manage.py startapp rest_api
 ```
 
 #### 1-2. DRF 적용  
+DRF는 왜 쓸까? 기존의 native django 방식대로 개발을 한다면 프론트 부분은 백엔드로부터 데이터를 받고 django template에 개발을 해야할 것이다. 이럴 경우, 백엔드와 프론트의 완전한 분리가 어렵다. 그래서 DRF를 사용하면 rest api가 사용가능하기 때문에 django 백엔드와 react 프론트가 분리가 가능하다.
 
 ```
 pip install djangorestframework
