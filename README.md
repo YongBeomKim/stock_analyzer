@@ -42,7 +42,9 @@ python manage.py startapp rest_api
 ```
 
 #### 1-2. DRF 적용  
-DRF는 왜 쓸까? 기존의 native django 방식대로 개발을 한다면 프론트 부분은 백엔드로부터 데이터를 받고 django template에 개발을 해야할 것이다. 이럴 경우, 백엔드와 프론트의 완전한 분리가 어렵다. 그래서 DRF를 사용하면 rest api가 사용가능하기 때문에 django 백엔드와 react 프론트가 분리가 가능하다.
+DRF는 왜 쓸까? (참고 : https://medium.com/@whj2013123218/django-rest-api%EC%9D%98-%ED%95%84%EC%9A%94%EC%84%B1%EA%B3%BC-%EA%B0%84%EB%8B%A8%ED%95%9C-%EC%82%AC%EC%9A%A9-%EB%B0%A9%EB%B2%95-a95c6dd195fd)  
+1. 기존의 native django 방식대로 개발을 한다면 프론트 부분은 백엔드로부터 데이터를 받고 django template에 개발을 해야할 것이다. 이럴 경우, 백엔드와 프론트의 완전한 분리가 어렵다. 그래서 DRF를 사용하면 rest api가 사용가능하기 때문에 django 백엔드와 react 프론트가 분리가 가능하다.  
+2. 재사용성이 좋아진다. view에서 바로 html로 넘기게 되면 view에는 비슷한 로직도 매번 class-based view로 작성해야 하는 비효율적인 상황이 연출된다. 그러나 api를 적용하면 해당 api를 재사용할 수 있다. 
 
 ```
 pip install djangorestframework
@@ -71,7 +73,7 @@ REST_FRAMEWORK = {
 }
 ```  
 
-rest_api앱에 urls.py를 생성한 뒤, 루트 urls.py에 다음과 같은 경로를 매핑한다.  
+rest_api앱에 urls.py를 생성한 뒤, 루트 urls.py에 다음과 같은 경로를 라우팅한다.  
 
 ```
 urlpatterns = [
@@ -117,10 +119,11 @@ class UserSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = (
-            'user_id',
-            'user_name'
-        )
+        fields = '__all__'
+        # fields = (
+        #     'user_id',
+        #     'user_name'
+        # )
 
 ```  
 
@@ -129,48 +132,35 @@ rest_api/views.py
 
 ```
 from rest_framework import viewsets
-from rest_framework import permissions
+
 from .serializers import PostSerializer
 from .models import Post
 
 
 # Create your views here.
-class PostView(viewsets.ModelViewSet):
+class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
 
 ```  
 
-url을 매핑시켜보자.  
+url을 매핑시켜보자. viewset을 라우팅할 때에는 CBV, FBV, Mixin, GenericAPIView와는 다르게 router객체로 간편하게 등록할 수 있다.  
 rest_api/urls.py  
 
 ```
 from django.urls import path, include
-from rest_framework.urlpatterns import format_suffix_patterns
-from .views import PostView
 
+from rest_framework.routers import DefaultRouter
 
-post_list = PostView.as_view({
-    'post': 'create',
-    'get': 'list'
-})
+from .views import PostViewSet
 
-post_detail = PostView.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'patch': 'partial_update',
-    'delete': 'destroy'
-})
+router = DefaultRouter.register('posts/', PostViewSet)
 
-urlpatterns = format_suffix_patterns([
+urlpatterns = [
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('posts/', post_list, name='post_list'),
-    path('posts/<int:pk>/', post_detail, name='post_detail')
-])
+
+    path('', include(router.urls))
+]
 
 ```
 
