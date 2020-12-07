@@ -48,9 +48,8 @@ python manage.py startapp rest_api
 
 ```
 class Post(models.Model):
-    user_id = models.IntegerField(primary_key=True)
     user_name = models.CharField(max_length=200)
-    Not yet..
+    # bookmark_item_list = models.CharField(max_length=200) # 연구중..
 
     def __str__(self):
         return self.user_name
@@ -59,13 +58,22 @@ class Post(models.Model):
 - 주식시장 모델  
 
 ```
-Not yet..
+class StockMarket(models.Model):
+    stock_market_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.stock_market_name
 ```
 
 - 주식종목 모델  
 
 ```
-Not yet..
+class StockItem(models.Model):
+    stock_market = models.ForeignKey(StockMarket, on_delete=models.CASCADE)
+    stock_item_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.stock_item_name
 ```
 
 #### 1-3. REST API 구현 (DRF 적용)  
@@ -116,12 +124,27 @@ from django.db import models
 
 
 # Create your models here.
-class Post(models.Model):
-    user_id = models.IntegerField(primary_key=True)
+class StockUser(models.Model):
     user_name = models.CharField(max_length=200)
+    # bookmark_item_list = models.CharField(max_length=200) # 연구중..
 
     def __str__(self):
         return self.user_name
+
+
+class StockMarket(models.Model):
+    stock_market_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.stock_market_name
+
+
+class StockItem(models.Model):
+    stock_market = models.ForeignKey(StockMarket, on_delete=models.CASCADE)
+    stock_item_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.stock_item_name
 ```  
 
 그 다음 해당 모델을 serialize해야 한다.  
@@ -133,7 +156,7 @@ rest_api앱에 serializers.py를 작성해보자.
 
 ```
 from rest_framework import serializers
-from .models import Post
+from .models import StockUser, StockMarket, StockItem
 from django.contrib.auth.models import User
 
 
@@ -143,14 +166,22 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email')
 
 
-class PostSerializer(serializers.ModelSerializer):
+class StockUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Post
+        model = StockUser
         fields = '__all__'
-        # fields = (
-        #     'user_id',
-        #     'user_name'
-        # )
+
+
+class StockMarketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StockMarket
+        fields = '__all__'
+
+
+class StockItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StockItem
+        fields = '__all__'
 
 ```  
 
@@ -170,14 +201,24 @@ rest_api/views.py
 ```
 from rest_framework import viewsets
 
-from .serializers import PostSerializer
-from .models import Post
+from .serializers import StockUserSerializer, StockMarketSerializer, StockItemSerializer
+from .models import StockUser, StockMarket, StockItem
 
 
 # Create your views here.
-class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+class StockUserViewSet(viewsets.ModelViewSet):
+    queryset = StockUser.objects.all()
+    serializer_class = StockUserSerializer
+
+
+class StockMarketViewSet(viewsets.ModelViewSet):
+    queryset = StockMarket.objects.all()
+    serializer_class = StockMarketSerializer
+
+
+class StockItemViewSet(viewsets.ModelViewSet):
+    queryset = StockItem.objects.all()
+    serializer_class = StockItemSerializer
 ```  
 
 url을 라우팅 시켜보자. viewset을 라우팅할 때에는 CBV, FBV, Mixin, GenericAPIView와는 다르게 router객체로 간편하게 등록할 수 있다.  
@@ -188,14 +229,23 @@ from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 
-from .views import PostViewSet
+from .views import StockUserViewSet
 
-router = DefaultRouter()
-router.register('posts', PostViewSet)
+router_user = DefaultRouter()
+router_user.register('user', StockUserViewSet)
+
+router_market = DefaultRouter()
+router_market.register('market', StockUserViewSet)
+
+router_item = DefaultRouter()
+router_item.register('item', StockUserViewSet)
 
 urlpatterns = [
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('', include(router.urls))
+
+    path('', include(router_user.urls)),
+    path('', include(router_market.urls)),
+    path('', include(router_item.urls)),
 ]
 ```  
 
