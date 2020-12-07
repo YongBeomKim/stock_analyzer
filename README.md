@@ -96,10 +96,10 @@ class Post(models.Model):
 
 그 다음 해당 모델을 serialize해야 한다.  
 그 이유는 Django ORM의 Queryset은 Context로써 Django template으로 넘겨지며, HTML로 렌더링되어 Response로 보내지게 된다.
-하지만 **JSON으로 데이터를 보내야 하는 RESTful API**는 HTML로 렌더링 되는 Django template를 사용할 수 없습니다. 그래서 Queryset을 Nested한 JSON
+하지만 **JSON으로 데이터를 보내야 하는 RESTful API**는 HTML로 렌더링 되는 Django template를 사용할 수 없다. 그래서 Queryset을 Nested한 JSON
 으로 매핑하는 과정을 거쳐야 하기 때문이다. (Queryset >> Json : Serialize)  
 
-rest_api앱에 serializers.py를 작성해보자. (생성하세요)  
+rest_api앱에 serializers.py를 작성해보자.  
 
 ```
 from rest_framework import serializers
