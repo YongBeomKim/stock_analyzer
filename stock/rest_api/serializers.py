@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post
+from .models import StockUser, StockMarket, StockItem
 from django.contrib.auth.models import User
 
 
@@ -9,7 +9,19 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email')
 
 
-class PostSerializer(serializers.ModelSerializer):
+class StockUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Post
+        model = StockUser
+        fields = '__all__'
+
+
+class StockMarketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StockMarket
+        fields = '__all__'
+
+
+class StockItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StockItem
         fields = '__all__'
