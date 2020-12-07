@@ -19,7 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="362b83dd-6edb-4416-8063-0f0ab4a479d7" name="Default Changelist" comment="" />
+    <list default="true" id="9b9bca60-2a7c-493a-88a2-94ddbfd32236" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,7 +35,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectId" id="1l5Xsqz43WuP5BjUzb074jlDqjR" />
+  <component name="ProjectId" id="1lJHdcK4ORLqckFxyB3pCB3tnfe" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -43,17 +43,17 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../drf_tutorial" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="362b83dd-6edb-4416-8063-0f0ab4a479d7" name="Default Changelist" comment="" />
-      <created>1606888135786</created>
+      <changelist id="9b9bca60-2a7c-493a-88a2-94ddbfd32236" name="Default Changelist" comment="" />
+      <created>1607308361871</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1606888135786</updated>
+      <updated>1607308361871</updated>
     </task>
     <servers />
   </component>
@@ -67,16 +67,11 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2660" y="275" key="FileChooserDialogImpl" timestamp="1607308360594">
+    <state x="2381" y="164" key="SettingsEditor" timestamp="1607308487255">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2660" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607308360594" />
-    <state x="2381" y="164" key="SettingsEditor" timestamp="1606889623090">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="2381" y="164" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1606889623090" />
+    <state x="2381" y="164" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607308487255" />
   </component>
 </project>

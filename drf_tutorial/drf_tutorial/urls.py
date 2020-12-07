@@ -1,4 +1,4 @@
-"""stock URL Configuration
+"""drf_tutorial URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+
+
+
 urlpatterns = [
-    path('stock_inquiry/', include('stock_inquiry.urls')),
-    path('stock_prediction/', include('stock_prediction.urls')),
-    path('rest_api/', include('rest_api.urls')),
     path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),
 ]
