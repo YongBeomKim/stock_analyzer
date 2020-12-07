@@ -128,6 +128,16 @@ class PostSerializer(serializers.ModelSerializer):
 ```  
 
 model과 serializer를 완성시켰으니 이제 view를 작성할 차례이다.  
+
+(참고 : https://ssungkang.tistory.com/entry/Django-APIView-Mixins-generics-APIView-ViewSet%EC%9D%84-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90)  
+
+DRF View 종류  
+- CBV(Class-Based View, APIView 상속)
+- FBV(Function-Based View, @api_view 데코레이터 사용)
+- Mixin(요청마다 serializer 정의하는 것을 최소화)
+- generic APIView
+- ViewSet
+
 rest_api/views.py  
 
 ```
@@ -141,10 +151,9 @@ from .models import Post
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-
 ```  
 
-url을 매핑시켜보자. viewset을 라우팅할 때에는 CBV, FBV, Mixin, GenericAPIView와는 다르게 router객체로 간편하게 등록할 수 있다.  
+url을 라우팅 시켜보자. viewset을 라우팅할 때에는 CBV, FBV, Mixin, GenericAPIView와는 다르게 router객체로 간편하게 등록할 수 있다.  
 rest_api/urls.py  
 
 ```
@@ -154,16 +163,17 @@ from rest_framework.routers import DefaultRouter
 
 from .views import PostViewSet
 
-router = DefaultRouter.register('posts/', PostViewSet)
+router = DefaultRouter()
+router.register('posts', PostViewSet)
 
 urlpatterns = [
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
-
     path('', include(router.urls))
 ]
+```  
 
-```
-
+서버를 실행시킨 후, http://localhost:8000/rest_api/posts/에서 자세한 내용을 확인할 수 있다.  
+DRF에 관련된 내용은 drf_tutorial을 확인하면 된다.  
 
 #### 1-2 뷰 설계  
 ##### 1-2-1 실시간 주가 정보 조회앱의 뷰 설계  
