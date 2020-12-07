@@ -24,6 +24,10 @@
 - Matplotlib  
 >> 데이터 시각화 모듈.
 
+## Case Rule  
+클래스명 : Upper Camel case  
+메소드, 속성 : Snake case
+
 ## 계획 및 진행과정  
 
 ### 1. 백엔드서버 구축  
