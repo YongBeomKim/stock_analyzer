@@ -41,6 +41,35 @@ python manage.py startapp stock_prediction
 python manage.py startapp rest_api
 ```
 
+#### 1-2. DRF 적용  
+
+```
+pip install djangorestframework
+```  
+
+DRF를 설치한 후 settings.py에 다음과 같이 적어준다.  
+
+```
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'stock_inquiry',
+    'stock_prediction',
+    'rest_framework', # DRF를 앱으로 등록
+    'rest_api'
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+```  
+
 #### 1-2 뷰 설계  
 ##### 1-2-1 실시간 주가 정보 조회앱의 뷰 설계  
 
