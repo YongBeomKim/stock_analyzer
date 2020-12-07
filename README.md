@@ -41,7 +41,7 @@ python manage.py startapp stock_prediction
 python manage.py startapp rest_api
 ```
 
-#### 1-2. DRF 적용  
+#### 1-2. REST API 구현 (DRF 적용)  
 DRF는 왜 쓸까? (참고 : https://medium.com/@whj2013123218/django-rest-api%EC%9D%98-%ED%95%84%EC%9A%94%EC%84%B1%EA%B3%BC-%EA%B0%84%EB%8B%A8%ED%95%9C-%EC%82%AC%EC%9A%A9-%EB%B0%A9%EB%B2%95-a95c6dd195fd)  
 1. 기존의 native django 방식대로 개발을 한다면 프론트 부분은 백엔드로부터 데이터를 받고 django template에 개발을 해야할 것이다. 이럴 경우, 백엔드와 프론트의 완전한 분리가 어렵다. 그래서 DRF를 사용하면 rest api가 사용가능하기 때문에 django 백엔드와 react 프론트가 분리가 가능하다.  
 2. 재사용성이 좋아진다. view에서 바로 html로 넘기게 되면 view에는 비슷한 로직도 매번 class-based view로 작성해야 하는 비효율적인 상황이 연출된다. 그러나 api를 적용하면 해당 api를 재사용할 수 있다. 
