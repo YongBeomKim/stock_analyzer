@@ -41,6 +41,140 @@ python manage.py startapp stock_prediction
 python manage.py startapp rest_api
 ```
 
+#### 1-2. DRF 적용  
+DRF는 왜 쓸까? 기존의 native django 방식대로 개발을 한다면 프론트 부분은 백엔드로부터 데이터를 받고 django template에 개발을 해야할 것이다. 이럴 경우, 백엔드와 프론트의 완전한 분리가 어렵다. 그래서 DRF를 사용하면 rest api가 사용가능하기 때문에 django 백엔드와 react 프론트가 분리가 가능하다.
+
+```
+pip install djangorestframework
+```  
+
+DRF를 설치한 후 settings.py에 다음과 같이 적어준다.  
+
+```
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'stock_inquiry',
+    'stock_prediction',
+    'rest_framework', # DRF를 앱으로 등록
+    'rest_api' # api 서버로 사용할 앱
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+```  
+
+rest_api앱에 urls.py를 생성한 뒤, 루트 urls.py에 다음과 같은 경로를 매핑한다.  
+
+```
+urlpatterns = [
+    ...
+    path('rest_api/', include('rest_api.urls')),
+]
+```  
+
+rest_api의 models.py를 작성해보자.  
+
+```
+from django.db import models
+
+
+# Create your models here.
+class Post(models.Model):
+    user_id = models.IntegerField(primary_key=True)
+    user_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.user_name
+```  
+
+그 다음 해당 모델을 serialize해야 한다.  
+그 이유는 Django ORM의 Queryset은 Context로써 Django template으로 넘겨지며, HTML로 렌더링되어 Response로 보내지게 된다.
+하지만 **JSON으로 데이터를 보내야 하는 RESTful API**는 HTML로 렌더링 되는 Django template를 사용할 수 없다. 그래서 Queryset을 Nested한 JSON
+으로 매핑하는 과정을 거쳐야 하기 때문이다. (Queryset >> Json : Serialize)  
+
+rest_api앱에 serializers.py를 작성해보자.  
+
+```
+from rest_framework import serializers
+from .models import Post
+from django.contrib.auth.models import User
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email')
+
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = (
+            'user_id',
+            'user_name'
+        )
+
+```  
+
+model과 serializer를 완성시켰으니 이제 view를 작성할 차례이다.  
+rest_api/views.py  
+
+```
+from rest_framework import viewsets
+from rest_framework import permissions
+from .serializers import PostSerializer
+from .models import Post
+
+
+# Create your views here.
+class PostView(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+```  
+
+url을 매핑시켜보자.  
+rest_api/urls.py  
+
+```
+from django.urls import path, include
+from rest_framework.urlpatterns import format_suffix_patterns
+from .views import PostView
+
+
+post_list = PostView.as_view({
+    'post': 'create',
+    'get': 'list'
+})
+
+post_detail = PostView.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+
+urlpatterns = format_suffix_patterns([
+    path('auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('posts/', post_list, name='post_list'),
+    path('posts/<int:pk>/', post_detail, name='post_detail')
+])
+
+```
+
+
 #### 1-2 뷰 설계  
 ##### 1-2-1 실시간 주가 정보 조회앱의 뷰 설계  
 
