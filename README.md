@@ -275,6 +275,54 @@ mongodb atlas
 각 주식시장별 그래프를 띄우며, 해당 주식시장(코스피200, 코스닥150)의 종목별 주가 정보 조회 뷰로 접근할 수 있게 해준다.  
 무한스크롤형을 선택한 이유는 주식시장이 추가되는 경우를 고려한 것이다.  
 
+```
+import React, { Component } from 'react'
+import CardStockMarket from '../card/cardStockMarket'
+
+class ListStockMarket extends Component {
+    render() {
+        var markets = [];
+        var marketDatas = this.props.data;
+        var i = 0;
+
+        for (i = 0; i < marketDatas.length; i++){
+            marketData = marketDatas[i]
+            markets.push(
+            <li key = {marketData.id}>
+                <CardStockMarket name={marketData.name}></CardStockMarket>
+            </li>
+            );
+        }
+
+        return (
+        <nav>
+            <ul>
+            {markets}
+            </ul>
+        </nav>
+        );
+    }
+  }
+
+  export default ListStockMarket;
+
+```
+
+```
+// 리스트의 각 항목의 역할을 하는 카드 컴포넌트
+import React, { Component } from 'react'
+
+class CardStockMarket extends Component {
+    render() {
+        var marketName = this.props.name;
+        
+    }
+  }
+
+  export default CardStockMarkets;
+
+```
+
 - 종목별 주가 정보 조회 뷰 (List)  
 현재 시점 해당 주식시장의 여러 종목의 주가를 조회 가능.  
 해당 종목에 하이퍼링크를 달아 상세 정보 조회 뷰로 넘어갈 수 있게 한다.  
