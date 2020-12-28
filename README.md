@@ -8,11 +8,11 @@
 - Django & DRF (Django Rest Framework)  
 >> 백엔드서버로써 사용합니다.  
 
-- React.js
+- React.js & material ui
 > 프론트엔드로써 사용합니다.  
  
 - 증권사 API
-> 트래픽 제한과 태그변경으로 인한 유지보수의 어려움을 고려하여 증권사 API로 대체 예정. (크레온 api, 키움증권 api)
+> 트래픽 제한과 태그변경으로 인한 유지보수의 어려움을 고려하여 증권사 API로 대체 예정. (크레온 api)
 
 - MongoDB  
 > MongoDB를 채택한 이유는 스키마의 제약을 덜 받기 위함입니다. 
@@ -265,7 +265,7 @@ DRF에 관련된 내용은 drf_tutorial을 확인하면 된다.
 ### 2. MongoDB 연동  
 mongodb atlas
 
-~~### 3. 네이버 금융 주가 데이터 크롤링~~  
+### 3. 크레온 api를 통한 데이터 수집  
 
 ### 4. 프론트엔드 뷰 구축 (React.js)  
 #### 4-1 뷰 설계  
