@@ -312,16 +312,38 @@ class ListStockMarket extends Component {
 // 리스트의 각 항목의 역할을 하는 카드 컴포넌트
 import React, { Component } from 'react'
 
+import './cardStockMarket.css'
+
+import {Card, CardHeader, CardContent, CardActions, CardMedia} from '@material-ui/core'
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button'
+
 class CardStockMarket extends Component {
     render() {
         var marketName = this.props.name;
         
+        return (
+            <Card className="root">
+                <CardHeader>
+                    
+                </CardHeader>
+                <CardContent>
+                    <Typography className="content">I'm {marketName}. </Typography>
+                </CardContent>
+                <CardActions>
+                    <Button size="small">GO TO</Button>
+                </CardActions>
+            </Card>
+        );
     }
   }
 
-  export default CardStockMarkets;
+  export default CardStockMarket;
 
-```
+```  
+
+2020.12.29. 각 주식시장을 표현할 카드 설계중   
+<img width="1440" alt="스크린샷 2020-12-29 오후 10 46 30" src="https://user-images.githubusercontent.com/32003817/103288259-d30da980-4a27-11eb-8a1c-fdfab8a6fe86.png">
 
 - 종목별 주가 정보 조회 뷰 (List)  
 현재 시점 해당 주식시장의 여러 종목의 주가를 조회 가능.  
