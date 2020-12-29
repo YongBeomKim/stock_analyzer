@@ -1,0 +1,10 @@
+.root {
+    align-content: center;
+    max-width: 400px;
+    margin: 20px;
+}
+
+.content {
+    font-size: 30px;
+    font-style: italic;
+}
