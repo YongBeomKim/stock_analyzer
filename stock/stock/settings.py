@@ -95,7 +95,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         "CLIENT": {
            "name": 'StockDB',
-           "host": 'mongodb+srv://admin:git7100!@@cluster-test.f2efm.mongodb.net/StockDB?retryWrites=true&w=majority',
+           "host": 'mongodb+srv://<username>:<password>@cluster-test.f2efm.mongodb.net/<dbname>?retryWrites=true&w=majority',
            "username": 'admin',
            "password": 'git7100!@',
            "authMechanism": "SCRAM-SHA-1",
