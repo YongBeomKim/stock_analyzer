@@ -80,13 +80,26 @@ TEMPLATES = [
 WSGI_APPLICATION = 'stock.wsgi.application'
 
 
-# Database
+# Database (MongoDB)
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        "CLIENT": {
+           "name": 'StockDB',
+           "host": 'mongodb+srv://admin:<password>@cluster-test.f2efm.mongodb.net/<dbname>?retryWrites=true&w=majority',
+           "username": 'admin',
+           "password": 'git7100!@',
+           "authMechanism": "SCRAM-SHA-1",
+        },
     }
 }
 
