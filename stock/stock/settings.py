@@ -9,18 +9,35 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os, json
+from django.core.exceptions import ImproperlyConfigured
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '5-)alcko^t)_^lbn5tvw8zmo%*mo(2!omh+h6+bx-md+$^qd+-'
+# 20.12.31, ckr
+# 데이터 은닉화를 위해 json 파일을 이용, 민감 정보들을 따로 관리 (.gitignore에 명시함.)
+secret_file = os.path.join(BASE_DIR, 'secrets.json')
+
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
+
+def get_secret(setting, secrets=secrets):
+    """
+    secrets.json을 통해 값을 가져온다.
+    """
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "secrets.json 파일에 {} 값이 존재하지 않습니다.".format(setting)
+        raise ImproperlyConfigured(error_msg)
+
+SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -94,10 +111,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         "CLIENT": {
-           "name": 'StockDB',
-           "host": 'mongodb+srv://admin:<password>@cluster-test.f2efm.mongodb.net/<dbname>?retryWrites=true&w=majority',
-           "username": 'admin',
-           "password": 'git7100!@',
+           "name": get_secret("DB_NAME"),
+           "host": get_secret("DB_HOST"),
+           "username": get_secret("DB_USERNAME"),
+           "password": get_secret("DB_PASSWORD"),
            "authMechanism": "SCRAM-SHA-1",
         },
     }
