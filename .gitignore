@@ -29,6 +29,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+#########
+
 # back-end (django framework)
 # Created by https://www.toptal.com/developers/gitignore/api/django
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
@@ -46,3 +48,6 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media
+
+# secret data (ex. secret key, DB infos, ...etc)
+secrets.json
