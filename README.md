@@ -263,7 +263,11 @@ DRF에 관련된 내용은 drf_tutorial을 확인하면 된다.
 
 
 ### 2. MongoDB 연동  
-mongodb atlas
+1. MongoDB 가입 -> 클러스터 생성 이후 (프리티어)
+
+수정중
+
+2. 
 
 ### 3. 크레온 api를 통한 데이터 수집  
 
