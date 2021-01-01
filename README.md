@@ -260,14 +260,62 @@ DRF에 관련된 내용은 drf_tutorial을 확인하면 된다.
 
 
 
-
-
 ### 2. MongoDB 연동  
-1. MongoDB 가입 -> 클러스터 생성 이후 (프리티어)
+1. MongoDB 가입 -> 클러스터 생성 이후 하단의 그림과 같이 인증방식, DB 접근권한 등을 설정하여 Database user를 생성
 
-수정중
+![db1](https://user-images.githubusercontent.com/36228833/103440836-3dbf1f00-4c8c-11eb-8713-8c96c20b1b1c.PNG)
 
-2. 
+![db2](https://user-images.githubusercontent.com/36228833/103440843-4c0d3b00-4c8c-11eb-8fba-5fa45642e147.PNG)
+
+2. 왼쪽 메뉴에 Network Access에 들어간 뒤 DB에 접근을 허용할 IP를 등록
+
+![db3](https://user-images.githubusercontent.com/36228833/103440947-6562b700-4c8d-11eb-904e-4935f37f653e.PNG)
+
+![dbdbdb](https://user-images.githubusercontent.com/36228833/103440950-6eec1f00-4c8d-11eb-9184-605af1f29c62.PNG)
+
+**(스킵) 그 후 DB를 만들어야 하지만 파이썬 모델을 이용하여 만들것 이기 때문에 이 부분은 넘어감.
+
+![db4](https://user-images.githubusercontent.com/36228833/103440978-bb375f00-4c8d-11eb-9242-d394583a181c.PNG)
+
+3. 첫 페이지로 돌아와서 현재 Cluster의 Connection string을 복사
+
+![db5](https://user-images.githubusercontent.com/36228833/103440984-d1ddb600-4c8d-11eb-8ef9-97737853dfdc.PNG)
+
+![db6](https://user-images.githubusercontent.com/36228833/103440994-ef128480-4c8d-11eb-9ef4-82e1bcbc3851.PNG)
+
+4. 이제 connection string으로 mongoDB 연동을 위한 모듈들을 설치합니다.
+
+```
+$ pip install dnspython
+$ pip install djongo
+```
+
+5. 장고 프로젝트 내 settings.py 에 mongoDB 연동을 위한 코드 작성
+
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        "CLIENT": {
+           "name": "testDB",   # Database 이름입니다.
+           "host": "mongodb+srv://admin:<password>@cluster0.lvfxw.mongodb.net/<dbname>?retryWrites=true&w=majority",   # 방금 복사한 Connection string
+           "username": "admin",   # Database username
+           "password": "admin",   # Database user's password
+           "authMechanism": "SCRAM-SHA-1",   # 인증방식
+        },
+    }
+}
+```
+
+6. migrate 명령어를 통해 모델의 변동사항을 데이터베이스에 적용합니다.
+
+![db9](https://user-images.githubusercontent.com/36228833/103441103-fab27b00-4c8e-11eb-98d6-87eb8c1502ff.PNG)
+
+7. 첫 페이지의 collections를 눌러 DB가 잘 연동되었는지 확인
+
+![db8](https://user-images.githubusercontent.com/36228833/103441074-c212a180-4c8e-11eb-81b5-787bf727f28e.PNG)
+
+
 
 ### 3. 크레온 api를 통한 데이터 수집  
 
