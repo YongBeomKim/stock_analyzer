@@ -315,7 +315,36 @@ DATABASES = {
 
 ![db8](https://user-images.githubusercontent.com/36228833/103441074-c212a180-4c8e-11eb-81b5-787bf727f28e.PNG)
 
+### 2-1. settings.py 기밀정보 관리
+settings.py 에는 secret_key, DB 정보 등 외부에 노출되면 안되는 기밀정보들을 담고있다.
 
+SECRET_KEY의 용도 [출처](https://docs.djangoproject.com/en/3.0/ref/settings/#secret-key)
+- [암호화된 데이터 서명](https://docs.djangoproject.com/en/1.11/topics/signing/)을 포함하고 있다.
+- 사용자 세션, 비밀번호 재설정 요청, 메시지 등을위한 고유 토큰을 포함하고 있다.
+
+Django 앱에는 암호화 서명이 필요한 많은 것들이 있으며 'SECRET_KEY' 설정이 그 열쇠라고 볼 수 있다.
+
+해당 기밀 정보들을 다음과 같이 json 파일로 관리한다.
+
+*settings.py
+```
+secret_file = os.path.join(BASE_DIR, 'secrets.json')
+
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
+
+def get_secret(setting, secrets=secrets):
+    """
+    secrets.json을 통해 값을 가져온다.
+    """
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "secrets.json 파일에 {} 값이 존재하지 않습니다.".format(setting)
+        raise ImproperlyConfigured(error_msg)
+
+SECRET_KEY = get_secret("SECRET_KEY")
+```
 
 ### 3. 크레온 api를 통한 데이터 수집  
 
