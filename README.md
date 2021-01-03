@@ -318,7 +318,7 @@ DATABASES = {
 ### 2-1. settings.py 기밀정보 관리
 settings.py 에는 secret_key, DB 정보 등 외부에 노출되면 안되는 기밀정보들을 담고있다.
 
-SECRET_KEY의 용도 [출처](https://docs.djangoproject.com/en/3.0/ref/settings/#secret-key)
+SECRET_KEY의 용도 -- [출처](https://docs.djangoproject.com/en/3.0/ref/settings/#secret-key)
 - [암호화된 데이터 서명](https://docs.djangoproject.com/en/1.11/topics/signing/)을 포함하고 있다.
 - 사용자 세션, 비밀번호 재설정 요청, 메시지 등을위한 고유 토큰을 포함하고 있다.
 
