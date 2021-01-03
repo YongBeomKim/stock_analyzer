@@ -324,7 +324,18 @@ SECRET_KEY의 용도 -- [출처](https://docs.djangoproject.com/en/3.0/ref/setti
 
 Django 앱에는 암호화 서명이 필요한 많은 것들이 있으며 'SECRET_KEY' 설정이 그 열쇠라고 볼 수 있다.
 
-해당 기밀 정보들을 다음과 같이 json 파일로 관리한다.
+해당 기밀 정보들을 다음과 같이 json 파일로 관리하여 따로 호출하게끔 변경한다.
+
+*secrets.json
+```
+{
+    "SECRET_KEY": "your SECRET_KEY",
+    "DB_HOST" : "your DB Host",
+    "DB_NAME" : "your DB name",
+    "DB_USERNAME" : "your DB Username",
+    "DB_PASSWORD" : "your DB Password"
+}
+```
 
 *settings.py
 ```
