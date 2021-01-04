@@ -28,6 +28,16 @@
 클래스명 : Upper Camel case  
 메소드, 속성 : Snake case
 
+## 모듈 관리
+모듈 관리는 requirements.txt를 통해 이루어진다.  
+```
+# 패키지 목록과 버전 텍스트로 저장하기
+pip freeze > requirements.txt
+
+# 텍스트 파일에 있는 패키지를 설치하기
+pip install -r requirements.txt
+```
+
 ## 계획 및 진행과정  
 
 ### 1. 백엔드서버 구축  
