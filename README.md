@@ -28,6 +28,16 @@
 클래스명 : Upper Camel case  
 메소드, 속성 : Snake case
 
+## 모듈 관리
+모듈 관리는 requirements.txt를 통해 이루어진다.  
+```
+# 패키지 목록과 버전 텍스트로 저장하기
+pip freeze > requirements.txt
+
+# 텍스트 파일에 있는 패키지를 설치하기
+pip install -r requirements.txt
+```
+
 ## 계획 및 진행과정  
 
 ### 1. 백엔드서버 구축  
@@ -357,7 +367,19 @@ def get_secret(setting, secrets=secrets):
 SECRET_KEY = get_secret("SECRET_KEY")
 ```
 
-### 3. 크레온 api를 통한 데이터 수집  
+### 3. 크레온 api를 통한 데이터 수집
+(고려사항)
+
+본래는 주가정보 데이터를 가지고 tensorflow를 통해 미래주가를 예측하는 하는 방향으로 진행하려 했으나,
+
+크레온 api가 32bit 만 지원함. (tensorflow는 32bit를 지원하지않음)
+
+1. 웹 크롤링
+
+2. 크레온 api, tensorflow용 서버를 각각 따로 둬서 데이터 결과를 request-response 방식으로 주고받기
+
+3. 다른 api 활용
+
 
 ### 4. 프론트엔드 뷰 구축 (React.js)  
 #### 4-1 뷰 설계  
