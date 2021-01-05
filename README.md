@@ -372,11 +372,11 @@ SECRET_KEY = get_secret("SECRET_KEY")
 
 본래는 주가정보 데이터를 가지고 tensorflow를 통해 미래주가를 예측하는 하는 방향으로 진행하려 했으나,
 
-크레온 api가 32bit 만 지원함. (tensorflow는 32bit를 지원하지않음)
+크레온 api가 32bit 만 지원함. (tensorflow는 32bit를 지원하지 않음)
 
-1. 웹 크롤링
+1. 웹 크롤링 (pandas, yahoo-finance)
 
-2. 크레온 api, tensorflow용 서버를 각각 따로 둬서 데이터 결과를 request-response 방식으로 주고받기
+2. 크레온 api, tensorflow 학습용 서버를 각각 따로 둬서 데이터 결과를 request-response 방식으로 주고받기
 
 3. 다른 api 활용
 
