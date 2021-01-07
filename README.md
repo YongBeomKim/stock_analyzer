@@ -19,7 +19,7 @@
 
 - Regression (Sklearn)  
 > 주가 데이터를 회귀 분석을 통해 예측.  
-Linear Regression > Ridge Regression > Lasso Regression
+Linear Regression > Ridge Regression > Lasso Regression  
 전체적인 서비스가 구현이 되면 다른 모델을 도입하며 정확도를 높여나갈 예정입니다. 주가에 영향으 주는 독립변수(feature)들을 찾아야 합니다.  
 
 - Matplotlib  
