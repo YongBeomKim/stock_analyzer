@@ -17,9 +17,10 @@
 - MongoDB  
 > MongoDB를 채택한 이유는 스키마의 제약을 덜 받기 위함입니다. 
 
-- Logistic Regression (Sklearn)  
-> 주가 데이터를 선형회귀 분석을 통해 예측.  
-전체적인 서비스가 구현이 되면 다른 모델을 도입하며 정확도를 높여나갈 예정입니다.  
+- Regression (Sklearn)  
+> 주가 데이터를 회귀 분석을 통해 예측.  
+Linear Regression > Ridge Regression > Lasso Regression  
+전체적인 서비스가 구현이 되면 다른 모델을 도입하며 정확도를 높여나갈 예정입니다. 주가에 영향으 주는 독립변수(feature)들을 찾아야 합니다.  
 
 - Matplotlib  
 > 데이터 시각화 모듈.
@@ -490,7 +491,7 @@ e.g) 1년전, 6개월전, 3개월전, 1개월전
 해당 종목의 예측주가를 그래프로 시각화  
 종목별로 뷰가 동일할 것으로 예상되므로 **템플릿** 적용  
 
-### 5. Logistic Regression 적용  
+### 5. Regression 적용  
 
 ### 6. 데이터 시각화  
 
