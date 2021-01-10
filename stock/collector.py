@@ -1,4 +1,5 @@
 import time
+import requests
 import pandas_datareader as pdr
 
 # 2021.01.05.hsk : 병렬처리 연구 필요
