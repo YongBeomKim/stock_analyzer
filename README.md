@@ -271,10 +271,36 @@ DRF에 관련된 내용은 drf_tutorial을 확인하면 된다.
 
 #### 1-4. URL Patterns
 현재 DRF의 ViewSets를 통해 요청 CRUD URL을 구현해놓은 상태이다. 그러나 코드의 추상화 수준이 너무 높아서 문서로 직접 정리를 하려고 한다.  
-rest_api/user/  
-rest_api/user/[id]  
 
+- 사용자 목록 조회
+[GET] rest_api/user/  
 
+- 사용자 추가  
+[POST] rest_api/user/  
+
+```
+{
+    "user_name": "Test"
+}  
+```  
+
+- 특정 사용자 조회  
+[GET] rest_api/user/[id]  
+
+- 특정 사용자 정보 업데이트  
+[PUT] rest_api/user/[id]  
+
+```
+{
+    "id": 10,
+    "user_name": "Test U"
+}
+```  
+
+- 특정 사용자 제거  
+[DELETE] rest_api/user/[id]  
+
+사용자 이외의 다른 모델(market, item)도 같은 URL Pattern을 가진다.  
 
 ### 2. MongoDB 연동  
 1. MongoDB 가입 -> 클러스터 생성 이후 하단의 그림과 같이 인증방식, DB 접근권한 등을 설정하여 Database user를 생성
