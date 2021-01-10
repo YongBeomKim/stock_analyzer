@@ -269,6 +269,11 @@ DRF에 관련된 내용은 drf_tutorial을 확인하면 된다.
 
 위와 같은 방법으로 재사용이 가능한 어떤 REST API를 구현할까? **각 테이블(모델)에 CRUD API**  
 
+#### 1-4. URL Patterns
+현재 DRF의 ViewSets를 통해 요청 CRUD URL을 구현해놓은 상태이다. 그러나 코드의 추상화 수준이 너무 높아서 문서로 직접 정리를 하려고 한다.  
+rest_api/user/  
+rest_api/user/[id]  
+
 
 
 ### 2. MongoDB 연동  
