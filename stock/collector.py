@@ -2,6 +2,7 @@ import time
 import requests
 import pandas_datareader as pdr
 
+
 # 2021.01.05.hsk : 병렬처리 연구 필요
 # from multiprocessing import Process
 
@@ -14,6 +15,7 @@ class StockItemCollector:
         table = pdr.get_data_yahoo(self.item)
         print(table)
 
+
 if __name__ == '__main__':
     # 주식시장 목록, 이 부분도 대체 필요 (하드코딩 x)
     stock_items = ['067160.KQ', 'msft']
@@ -21,7 +23,7 @@ if __name__ == '__main__':
     cycle = 10
     # 주식종목의 컬렉터 집합
     collectors = list()
-    
+
     # processes = list()
 
     for stock_item in stock_items:

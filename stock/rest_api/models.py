@@ -20,6 +20,13 @@ class StockMarket(models.Model):
 class StockItem(models.Model):
     stock_market = models.ForeignKey(StockMarket, on_delete=models.CASCADE)
     stock_item_name = models.CharField(max_length=200)
+    reg_date = models.DateTimeField()
+    high = models.FloatField()
+    low = models.FloatField()
+    open = models.FloatField()
+    close = models.FloatField()
+    volume = models.FloatField()
+    adj_close = models.FloatField()
 
     def __str__(self):
         return self.stock_item_name
