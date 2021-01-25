@@ -1,5 +1,4 @@
 import time
-import requests
 import pandas_datareader as pdr
 
 
