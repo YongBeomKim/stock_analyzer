@@ -42,9 +42,17 @@ class ReqBase:
 
 
 class RetrieveItemReq(ReqBase):
+
+    pass
+
+
+class DeleteItemReq(ReqBase):
+    pass
+
+
+class UpdateItemReq(ReqBase):
     pass
 
 
 class InsertItemReq(ReqBase):
     pass
-
