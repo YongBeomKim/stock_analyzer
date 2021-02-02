@@ -3,8 +3,14 @@ from django.shortcuts import render
 
 from rest_framework import viewsets 
 
-from .serializers import StockUserSerializer, StockMarketSerializer, StockItemSerializer
-from .models import StockUser, StockMarket, StockItem
+from .serializers import StockUserSerializer
+from .serializers import StockMarketSerializer
+from .serializers import StockItemSerializer
+
+
+from .models import StockUser
+from .models import StockMarket
+from .models import StockItem
 
 
 # ModelViewSet URL

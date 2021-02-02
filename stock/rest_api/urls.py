@@ -2,7 +2,9 @@ from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 
-from .views import StockUserViewSet, StockMarketViewSet, StockItemViewSet
+from .views import StockUserViewSet
+from .views import StockMarketViewSet
+from .views import StockItemViewSet
 
 router_user = DefaultRouter()
 router_user.register('user', StockUserViewSet)

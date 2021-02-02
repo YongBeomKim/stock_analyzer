@@ -27,6 +27,7 @@ secret_file = os.path.join(BASE_DIR, 'secrets.json')
 with open(secret_file) as f:
     secrets = json.loads(f.read())
 
+
 def get_secret(setting, secrets=secrets):
     """
     secrets.json을 통해 값을 가져온다.
@@ -37,13 +38,13 @@ def get_secret(setting, secrets=secrets):
         error_msg = "secrets.json 파일에 {} 값이 존재하지 않습니다.".format(setting)
         raise ImproperlyConfigured(error_msg)
 
+
 SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -96,7 +97,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'stock.wsgi.application'
 
-
 # Database (MongoDB)
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -111,15 +111,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         "CLIENT": {
-           "name": get_secret("DB_NAME"),
-           "host": get_secret("DB_HOST"),
-           "username": get_secret("DB_USERNAME"),
-           "password": get_secret("DB_PASSWORD"),
-           "authMechanism": "SCRAM-SHA-1",
+            "name": get_secret("DB_NAME"),
+            "host": get_secret("DB_HOST"),
+            "username": get_secret("DB_USERNAME"),
+            "password": get_secret("DB_PASSWORD"),
+            "authMechanism": "SCRAM-SHA-1",
         },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -139,7 +138,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -152,7 +150,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

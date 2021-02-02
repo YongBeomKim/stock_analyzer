@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import StockUser, StockMarket, StockItem
+from .models import StockUser
+from .models import StockMarket
+from .models import StockItem
 from django.contrib.auth.models import User
 
 
