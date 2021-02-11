@@ -1,14 +1,8 @@
 import time
-import pandas as pd
-import pandas_datareader as pdr
 
-from datetime import datetime, timedelta
 from pykrx import stock
-from pandas import DataFrame
+from datetime import datetime, timedelta
 
-
-# 2021.01.05.hsk : 병렬처리 연구 필요
-# from multiprocessing import Process
 
 class StockItemCodeCollector:
     def __init__(self):
@@ -21,10 +15,10 @@ class StockItemCodeCollector:
     def __collect_tickers(market='KOSPI'):
         """
         stock.get_market_ticker_list()
-        ['095570', '006840', '027410', '282330', '138930', ...]
+        >> ['095570', '006840', '027410', '282330', '138930', ...]
 
         stock.get_market_ticker_name(ticker)
-        SK하이닉스
+        >> SK하이닉스
         """
         tickers = dict()
         today = datetime.today().strftime("%Y%m%d")
