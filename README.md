@@ -454,7 +454,7 @@ class StockItemDataFrameCollector:
 StockItemDataFrameCollector 인스턴스는 생성자에서 어떤 종목의 정보를 수집할지 정한다. get_dataframe_from_previous() 메소드를 통해 오늘날짜로부터 원하는 날 이전까지의 주가 정보를 데이터 프레임으로 반환한다.  
 
 ![image](https://user-images.githubusercontent.com/32003817/107649815-30507800-6cc1-11eb-9c41-57bfaef96eb8.png)
-삼성전자의 주가를 일정한 주기(10초)로 수집하는 
+삼성전자의 주가를 일정한 주기(10초)로 수집하는 모습
 
 
 ### 4. 프론트엔드 뷰 구축 (React.js)  
