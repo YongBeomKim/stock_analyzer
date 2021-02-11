@@ -11,13 +11,13 @@
 - React.js & material ui
 > 프론트엔드로써 사용합니다.  
  
-- 증권사 API
-> 트래픽 제한과 태그변경으로 인한 유지보수의 어려움을 고려하여 증권사 API로 대체 예정. (크레온 api)
+- PyKrx
+> 주가 정보 수집 모듈로써 사용됩니다.
 
 - MongoDB  
 > MongoDB를 채택한 이유는 스키마의 제약을 덜 받기 위함입니다. 
 
-- Regression (Sklearn)  
+- Sklearn (Regression)  
 > 주가 데이터를 회귀 분석을 통해 예측.  
 Linear Regression > Ridge Regression > Lasso Regression  
 전체적인 서비스가 구현이 되면 다른 모델을 도입하며 정확도를 높여나갈 예정입니다. 주가에 영향으 주는 독립변수(feature)들을 찾아야 합니다.  
@@ -86,6 +86,13 @@ class StockMarket(models.Model):
 class StockItem(models.Model):
     stock_market = models.ForeignKey(StockMarket, on_delete=models.CASCADE)
     stock_item_name = models.CharField(max_length=200)
+    reg_date = models.DateTimeField(default=timezone.now(), null=True)
+    high = models.FloatField(default=0.0)
+    low = models.FloatField(default=0.0)
+    open = models.FloatField(default=0.0)
+    close = models.FloatField(default=0.0)
+    volume = models.FloatField(default=0.0)
+    adj_close = models.FloatField(default=0.0)
 
     def __str__(self):
         return self.stock_item_name
@@ -315,7 +322,7 @@ DRF에 관련된 내용은 drf_tutorial을 확인하면 된다.
 
 ![dbdbdb](https://user-images.githubusercontent.com/36228833/103440950-6eec1f00-4c8d-11eb-9184-605af1f29c62.PNG)
 
-**(스킵) 그 후 DB를 만들어야 하지만 파이썬 모델을 이용하여 만들것 이기 때문에 이 부분은 넘어감.
+**(스킵) Django 모델을 migration하는 과정에서 데이터베이스가 자동으로 생성되므로 스킵
 
 ![db4](https://user-images.githubusercontent.com/36228833/103440978-bb375f00-4c8d-11eb-9242-d394583a181c.PNG)
 
@@ -325,7 +332,7 @@ DRF에 관련된 내용은 drf_tutorial을 확인하면 된다.
 
 ![db6](https://user-images.githubusercontent.com/36228833/103440994-ef128480-4c8d-11eb-9ef4-82e1bcbc3851.PNG)
 
-4. 이제 connection string으로 mongoDB 연동을 위한 모듈들을 설치합니다.
+4. connection string으로 mongoDB 연동을 위한 모듈들을 설치
 
 ```
 $ pip install dnspython
@@ -349,7 +356,7 @@ DATABASES = {
 }
 ```
 
-6. migrate 명령어를 통해 모델의 변동사항을 데이터베이스에 적용합니다.
+6. migrate 명령어를 통해 모델의 변동사항을 데이터베이스에 적용
 
 ![db9](https://user-images.githubusercontent.com/36228833/103441103-fab27b00-4c8e-11eb-98d6-87eb8c1502ff.PNG)
 
@@ -364,9 +371,7 @@ SECRET_KEY의 용도 -- [출처](https://docs.djangoproject.com/en/3.0/ref/setti
 - [암호화된 데이터 서명](https://docs.djangoproject.com/en/1.11/topics/signing/)을 포함하고 있다.
 - 사용자 세션, 비밀번호 재설정 요청, 메시지 등을위한 고유 토큰을 포함하고 있다.
 
-Django 앱에는 암호화 서명이 필요한 많은 것들이 있으며 'SECRET_KEY' 설정이 그 열쇠라고 볼 수 있다.
-
-해당 기밀 정보들을 다음과 같이 json 파일로 관리하여 따로 호출하게끔 변경한다.
+Django 앱에는 암호화 서명이 필요한 많은 것들이 있으며 'SECRET_KEY' 설정이 그 열쇠라고 볼 수 있다. 해당 기밀 정보들을 다음과 같이 json 파일로 관리하여 따로 호출하게끔 변경한다.
 
 *secrets.json
 ```
@@ -399,18 +404,57 @@ def get_secret(setting, secrets=secrets):
 SECRET_KEY = get_secret("SECRET_KEY")
 ```
 
-### 3. 크레온 api를 통한 데이터 수집
-(고려사항)
+### 3. PyKrx를 통한 데이터 수집
+#### 3-1 주식 종목 코드 수집
+```
+class StockItemCodeCollector:
+    def __init__(self):
+        self.markets = ['KOSPI', 'KOSDAQ', 'KONEX', 'ALL']
+        self.tickers = dict()
+        for market in self.markets:
+            self.tickers[market] = self.__collect_tickers(market)
 
-본래는 주가정보 데이터를 가지고 tensorflow를 통해 미래주가를 예측하는 하는 방향으로 진행하려 했으나,
+    @staticmethod
+    def __collect_tickers(market='KOSPI'):
+        """
+        stock.get_market_ticker_list()
+        >> ['095570', '006840', '027410', '282330', '138930', ...]
 
-크레온 api가 32bit 만 지원함. (tensorflow는 32bit를 지원하지 않음)
+        stock.get_market_ticker_name(ticker)
+        >> SK하이닉스
+        """
+        tickers = dict()
+        today = datetime.today().strftime("%Y%m%d")
 
-1. 웹 크롤링 (pandas, yahoo-finance)
+        for ticker in stock.get_market_ticker_list(today, market):
+            ticker_name = stock.get_market_ticker_name(ticker)
+            tickers[ticker_name] = ticker
+        return tickers
 
-2. 크레온 api, tensorflow 학습용 서버를 각각 따로 둬서 데이터 결과를 request-response 방식으로 주고받기
+    def get_code(self, market, ticker_name):
+        return self.tickers[market][ticker_name]
+```
+StockItemCodeCollector 인스턴스는 각 주식시장(KOSPI, KOSDAQ, KONEX, 전체)별로 딕셔너리에 각 종목의 이름과 코드를 보관하고 있다. get_code() 메소드를 통해 주식시장과 종목명을 입력하면 해당 종목 코드를 반환한다.  
 
-3. 다른 api 활용
+#### 3-2 주식 종목 데이터 수집
+```
+class StockItemDataFrameCollector:
+    def __init__(self, code):
+        self.code = code
+        self.today = datetime.now()
+        self.today_str = self.today.strftime("%Y%m%d")
+
+    def get_dataframe_from_previous(self, days=1):
+        interval = timedelta(days)
+        previous = self.today - interval
+        previous_str = previous.strftime("%Y%m%d")
+        dataframe = stock.get_market_ohlcv_by_date(previous_str, self.today_str, self.code)
+        return dataframe
+```
+StockItemDataFrameCollector 인스턴스는 생성자에서 어떤 종목의 정보를 수집할지 정한다. get_dataframe_from_previous() 메소드를 통해 오늘날짜로부터 원하는 날 이전까지의 주가 정보를 데이터 프레임으로 반환한다.  
+
+![image](https://user-images.githubusercontent.com/32003817/107649815-30507800-6cc1-11eb-9c41-57bfaef96eb8.png)
+삼성전자의 주가를 일정한 주기(10초)로 수집하는 
 
 
 ### 4. 프론트엔드 뷰 구축 (React.js)  
