@@ -1,17 +1,19 @@
 import json
 import time
 
-from pandas import DataFrame, Series
-from pandas._libs.tslibs.timestamps import Timestamp
 from pykrx import stock
+from pandas import DataFrame, Series
 from datetime import datetime, timedelta
+
+from interface.req_interface import CreateItemReq
 
 
 class StockItemCodeCollector:
     def __init__(self):
-        self.markets = ['KOSPI', 'KOSDAQ', 'KONEX', 'ALL']
+        # self.markets = ['KOSPI', 'KOSDAQ', 'KONEX', 'ALL']
+        self.markets = {'KOSPI': 1, 'KOSDAQ': 2, 'KONEX': 3, 'ALL': 4}
         self.tickers = dict()
-        for market in self.markets:
+        for market in self.markets.keys():
             self.tickers[market] = self.__collect_tickers(market)
 
     @staticmethod
@@ -51,16 +53,23 @@ class StockItemDataFrameCollector:
 
 class Converter:
     @classmethod
-    def convert_to_json(cls, df: DataFrame):
+    def convert_to_json_for_item(cls, df: DataFrame, market: int, company: str):
         json_list = list()
         for index in df.index:
-            index: Timestamp
-            index_per_date: str = index.strftime('%Y-%m-%d')
+            # 각 날짜별 행을 딕셔너리로 가져오는 과정
+            index_per_date: str = index.strftime('%Y-%m-%d')  # index: TimeStamp
             series_per_date: Series = df.loc[index_per_date]
             json_str_per_date: str = series_per_date.to_json(force_ascii=False)
             json_per_date: dict = json.loads(json_str_per_date)
-            json_per_date = cls.__convert_key_from_kor_to_eng_for_item(json_per_date)
+
+            # 주식시장, 종목, 등록일 삽입
+            json_per_date['stock_market'] = market
+            json_per_date['stock_item_name'] = company
             json_per_date['reg_date'] = index_per_date
+
+            # 한글로 된 키를 영문으로 변경
+            json_per_date = cls.__convert_key_from_kor_to_eng_for_item(json_per_date)
+
             json_list.append(json_per_date)
         return json_list
 
@@ -84,8 +93,15 @@ class Manager:
         self.cycle = 10
 
         code_collector = StockItemCodeCollector()
+        dict_market = code_collector.markets
+        list_market = list(dict_market.keys())
+
+        self.market = list_market[0]  # KOSPI
+        self.market_id = dict_market[self.market]
+        self.company = '삼성전자'
+
+        code = code_collector.get_code(self.market, self.company)
         codes = list()
-        code = code_collector.get_code(code_collector.markets[0], '삼성전자')
         codes.append(code)
 
         # 주식종목의 컬렉터 집합
@@ -95,8 +111,11 @@ class Manager:
         while True:
             for data_collector in self.data_collectors:
                 df = data_collector.get_dataframe_from_previous(10)
-                json_data = Converter.convert_to_json(df)
-                print(json_data)
+                json_data = Converter.convert_to_json_for_item(df, self.market_id, self.company)
+                # print(json_data)
+                req = CreateItemReq()
+                req.set_param(json_data)
+                res = req.send_post()
 
             time.sleep(self.cycle)
 
