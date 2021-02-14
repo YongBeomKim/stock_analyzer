@@ -8,15 +8,18 @@ class BaseReq:
     def __init__(self):
         self.url = 'http://127.0.0.1:8000/rest_api/'
         self.login_url = self.url + 'auth/login/'
+        # 2021.02.14.hsk : 추후에 screts.json으로 통합
+        self.id = 'admin'
+        self.password = 'admin'
         self.data = None
-        self.client, self.login_res = self._login(self.login_url)
+        self.client, self.login_res = self._login(self.login_url, self.id, self.password)
         
     @staticmethod
-    def _login(login_url):
+    def _login(login_url, id, password):
         client = requests.session()
         client.get(login_url)
         csrf_token = client.cookies['csrftoken']
-        login_data = {'Username': "admin", 'Password': "admin", 'csrfmiddlewaretoken': csrf_token}
+        login_data = {'Username': id, 'Password': password, 'csrfmiddlewaretoken': csrf_token}
         login_res = client.post(login_url, data=login_data)
         return client, login_res
 
@@ -41,7 +44,7 @@ class BaseCreate(BaseReq):
     @csrf_exempt
     def send_post(self):
         for datum in self.data:
-            res = self.client.post(self.url, json=datum)
+            res = self.client.post(self.url, json=datum)  # self.client(현재 활성화된 로그인 세션)를 사용한 요청
             res = self._ret(res)
             print(res, datum)
 
