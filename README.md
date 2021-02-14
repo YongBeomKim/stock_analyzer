@@ -6,7 +6,7 @@
 
 ## 사용될 스택
 - Django & DRF (Django Rest Framework)  
->> 백엔드서버로써 사용합니다.  
+> 백엔드서버로써 사용합니다.  
 
 - React.js & material ui
 > 프론트엔드로써 사용합니다.  
