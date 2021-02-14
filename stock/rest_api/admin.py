@@ -7,7 +7,7 @@ from .models import StockItem
 # Register your models here.
 @admin.register(StockItem)
 class StockItemAdmin(admin.ModelAdmin):
-    list_display = ('stock_market', 'stock_item_name', 'reg_date')
+    list_display = ('stock_market', 'stock_item_name', 'reg_date', 'high', 'low', 'open', 'close', 'volume')
     list_display_links = ['stock_item_name']
 
 # @admin.register(StockItem) 데코레이터로 대체

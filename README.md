@@ -373,7 +373,7 @@ SECRET_KEY의 용도 -- [출처](https://docs.djangoproject.com/en/3.0/ref/setti
 
 Django 앱에는 암호화 서명이 필요한 많은 것들이 있으며 'SECRET_KEY' 설정이 그 열쇠라고 볼 수 있다. 해당 기밀 정보들을 다음과 같이 json 파일로 관리하여 따로 호출하게끔 변경한다.
 
-*secrets.json
+* secrets.json
 ```
 {
     "SECRET_KEY": "your SECRET_KEY",
@@ -384,7 +384,7 @@ Django 앱에는 암호화 서명이 필요한 많은 것들이 있으며 'SECRE
 }
 ```
 
-*settings.py
+* settings.py
 ```
 secret_file = os.path.join(BASE_DIR, 'secrets.json')
 
@@ -547,12 +547,14 @@ class BaseCreate(BaseReq):
             res = self.client.post(self.url, json=datum)  # self.client(현재 활성화된 로그인 세션)를 사용한 요청
             res = self._ret(res)
             print(res, datum)
-```
+```  
 
+![image](https://user-images.githubusercontent.com/32003817/107878707-cc73bc80-6f17-11eb-9a0d-1adba26d3ec9.png)  
+![image](https://user-images.githubusercontent.com/32003817/107878749-05139600-6f18-11eb-93b9-bb83d640e97b.png)  
+성공적으로 데이터가 삽입된 모습
 
-CSRF는 무엇인가? CSRF는 Cross-site request forgery의 약자로 '사이트 간 요청 위조'를 의미한다. 사이트 간 스크립팅(XSS) 공격은 공격자가 웹 사이트에 악의적인 스크립트를 교묘하게 끼워넣어 사용자가 특정 웹사이트를 신용하는 점을 노린 것이라면, CSRF는 그와 반대로 특정 웹사이트가 사용자의 웹 브라우저를 신용하는 상태를 노린 것이다. 일단 사용자가 웹사이트에 로그인한 상태에서 사이트간 요청 위조 공격 코드가 삽입된 페이지를 열면, 공격 대상이 되는 웹사이트는 위조된 공격 명령이 믿을 수 있는 사용자로부터 발송된 것으로 판단하게 되어 공격에 노출된다.  
-
-CSRF 토큰이 존재하는 이유는 CSRF 공격을 방지하기 위해 고유한 값을 대조하여 사용자와 대조하기 위함이다.
+* 참고  
+CSRF는 무엇인가? CSRF는 Cross-site request forgery의 약자로 '사이트 간 요청 위조'를 의미한다. 사이트 간 스크립팅(XSS) 공격은 공격자가 웹 사이트에 악의적인 스크립트를 교묘하게 끼워넣어 사용자가 특정 웹사이트를 신용하는 점을 노린 것이라면, CSRF는 그와 반대로 특정 웹사이트가 사용자의 웹 브라우저를 신용하는 상태를 노린 것이다. 일단 사용자가 웹사이트에 로그인한 상태에서 사이트간 요청 위조 공격 코드가 삽입된 페이지를 열면, 공격 대상이 되는 웹사이트는 위조된 공격 명령이 믿을 수 있는 사용자로부터 발송된 것으로 판단하게 되어 공격에 노출된다. **CSRF 토큰이 존재하는 이유는 CSRF 공격을 방지하기 위해 고유한 값을 대조하여 사용자와 대조하기 위함이다.**
 
 
 
