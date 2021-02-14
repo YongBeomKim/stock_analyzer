@@ -1,5 +1,8 @@
+import json
 import time
 
+from pandas import DataFrame, Series
+from pandas._libs.tslibs.timestamps import Timestamp
 from pykrx import stock
 from datetime import datetime, timedelta
 
@@ -46,6 +49,35 @@ class StockItemDataFrameCollector:
         return dataframe
 
 
+class Converter:
+    @classmethod
+    def convert_to_json(cls, df: DataFrame):
+        json_list = list()
+        for index in df.index:
+            index: Timestamp
+            index_per_date: str = index.strftime('%Y-%m-%d')
+            series_per_date: Series = df.loc[index_per_date]
+            json_str_per_date: str = series_per_date.to_json(force_ascii=False)
+            json_per_date: dict = json.loads(json_str_per_date)
+            json_per_date = cls.__convert_key_from_kor_to_eng_for_item(json_per_date)
+            json_per_date['reg_date'] = index_per_date
+            json_list.append(json_per_date)
+        return json_list
+
+    @staticmethod
+    def __convert_key_from_kor_to_eng_for_item(json_per_date: dict):
+        replacements = {'시가': 'open',
+                        '종가': 'close',
+                        '고가': 'high',
+                        '저가': 'low',
+                        '거래량': 'volume'}
+
+        for key_kor, key_eng in replacements.items():
+            json_per_date[key_eng] = json_per_date.pop(key_kor)
+
+        return json_per_date
+
+
 class Manager:
     def __init__(self):
         # 업데이트 주기
@@ -63,45 +95,12 @@ class Manager:
         while True:
             for data_collector in self.data_collectors:
                 df = data_collector.get_dataframe_from_previous(10)
-                print(df.head(3))
+                json_data = Converter.convert_to_json(df)
+                print(json_data)
+
             time.sleep(self.cycle)
 
 
 if __name__ == '__main__':
     manager = Manager()
     manager.process()
-
-# class StockItemCodeCollector:
-#     keys = ['회사명', '종목코드']
-#
-#     def __init__(self):
-#         url = 'http://kind.krx.co.kr/corpgeneral/corpList.do?method=download'
-#         self.df: DataFrame = pd.read_html(url, header=0)[0]
-#         self.df = self.df[self.keys]
-#         self.hash_table = self.convert_to_hashable(self.df)
-#
-#     @classmethod
-#     def convert_to_hashable(cls, df: DataFrame):
-#         """
-#         2021.02.04.hsk : 회사명과 종목코드를 자기고 있는 DataFrame을 딕셔너리(hashable) 형태로 반환
-#         """
-#         hash_table = dict()
-#         for index, row in df.iterrows():
-#             key = row[cls.keys[0]]
-#             val = row[cls.keys[1]]
-#             hash_table[key] = val
-#         return hash_table
-#
-#     def get_code(self, company_name):
-#         return self.hash_table[company_name]
-
-
-# class StockItemCollector:
-#     def __init__(self, item):
-#         self.item = item
-#         self.table = None
-#
-#     def collect(self):
-#         print('[{0}]'.format(self.item))
-#         self.table = pdr.get_data_yahoo(self.item)
-#         print(self.table)

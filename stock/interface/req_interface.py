@@ -1,11 +1,11 @@
-import abc
 import requests
 
 # http://127.0.0.1:8000/rest_api/user/10/
 
+
 class BaseReq:
     def __init__(self):
-        self.url = 'https://localhost.com/rest_api/'
+        self.url = 'http://127.0.0.1:8000/rest_api/'
         self.data = None
 
     @staticmethod
@@ -21,17 +21,29 @@ class BaseReq:
     def get_param(self):
         return self.data
 
+
 class BaseCreate(BaseReq):
+    def __init__(self):
+        super().__init__()
+
     def send_post(self):
         res = requests.post(self.url, json=self.data)
         return self._ret(res)
 
+
 class BaseRead(BaseReq):
+    def __init__(self):
+        super().__init__()
+
     def send_get(self):
         res = requests.get(self.url)
         return self._ret(res)
 
+
 class BaseUpdate(BaseReq):
+    def __init__(self):
+        super().__init__()
+
     def send_put(self):
         res = requests.put(self.url, json=self.data)
         return self._ret(res)
@@ -40,19 +52,35 @@ class BaseUpdate(BaseReq):
         res = requests.patch(self.url, json=self.data)
         return self._ret(res)
 
+
 class BaseDelete(BaseReq):
+    def __init__(self):
+        super().__init__()
+
     def send_delete(self):
         res = requests.delete(self.url)
         return self._ret(res)
 
+
 class CreateItemReq(BaseCreate):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.url += 'item/'
+
 
 class ReadItemReq(BaseRead):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.url += 'item/'
+
 
 class UpdateItemReq(BaseUpdate):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.url += 'item/'
+
 
 class DeleteItemReq(BaseDelete):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.url += 'item/'
