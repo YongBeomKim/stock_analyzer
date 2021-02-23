@@ -58,7 +58,8 @@ INSTALLED_APPS = [
     'stock_inquiry',
     'stock_prediction',
     'rest_framework',
-    'rest_api'
+    'rest_api',
+    'corsheaders'
 ]
 
 REST_FRAMEWORK = {
@@ -74,6 +75,7 @@ REST_FRAMEWORK = {
 # }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -83,6 +85,34 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Cross Browsing issue allow
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+# CORS_ALLOW_WHITELIST = (
+#     "http://localhost:8080"
+# )
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'PATCH',
+    'POST',
+    'PUT'
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+    
 ROOT_URLCONF = 'stock.urls'
 
 TEMPLATES = [
@@ -161,3 +191,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
