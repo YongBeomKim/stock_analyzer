@@ -14,6 +14,10 @@ class App extends Component{
     super(props);
   }
 
+  shouldComponentUpdate(){
+    
+  }
+
   render(){
     console.log('im render!', this.state.markets);
 
