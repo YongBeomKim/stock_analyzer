@@ -643,7 +643,7 @@ class CardStockMarket extends Component {
 참고 : https://www.zerocho.com/category/React/post/579b5ec26958781500ed9955  
 mongodb로부터 가져온 주식시장 정보를 바탕으로 CardStockMarket 컴포넌트를 출력한 내용이다. 우선 React 컴포넌트의 라이프사이클에 대한 간단한 설명을 하자면, 컴포넌트가 최초로 실행되면 mount된다고 표현한다. 이 대, context, defaultProps와 state를 저장한다. 그리고 **componentWillMount** 메소드가 호출된다. 이때는 컴포넌트가 DOM에 부착되기 전이므로 state나 props를 바꿔선 안된다. **render** 메소드를 통해 DOM에 부착된 후, **componentDidMount** 메소드가 호출된다. componentDidMount 메소드는 컴포넌트가 최초로 실행되고 DOM에 부착된 후에 실행되므로 각 컴포넌트가 생성된 후 최초 한번만 호출된다. 이때는 DOM에 부착되어 있는 상태이기 때문에 AJAX요청이나 setTimeout, setInterval과 같은 행동을 한다.  
 
-그리고 axios 모듈을 통해 react로부터 django 서버를 거쳐 mongodb에 있는 데이터를 요청해왔다. python의 requests 모듈과 같다고 생각하면 된다. ** 아직 원인은 파악하지 못했지만 render에서 axios를 통해 요청할 경우 2번씩 요청되는 현상이 발생했다. ** componentDidMount 라이프사이클에서 요청하자 이와같은 문제는 해결됬다.  
+그리고 axios 모듈을 통해 react로부터 django 서버를 거쳐 mongodb에 있는 데이터를 요청해왔다. python의 requests 모듈과 같다고 생각하면 된다. **아직 원인은 파악하지 못했지만 render에서 axios를 통해 요청할 경우 2번씩 요청되는 현상이 발생했다.** componentDidMount 라이프사이클에서 요청하자 이와같은 문제는 해결됬다.  
 ```
 App.js 
 ...
