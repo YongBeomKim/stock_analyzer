@@ -637,6 +637,42 @@ class CardStockMarket extends Component {
 
 2020.12.29. 각 주식시장을 표현할 카드 설계중   
 <img width="1440" alt="스크린샷 2020-12-29 오후 10 46 30" src="https://user-images.githubusercontent.com/32003817/103288259-d30da980-4a27-11eb-8a1c-fdfab8a6fe86.png">
+
+2021.02.24  
+![image](https://user-images.githubusercontent.com/32003817/108954001-750be400-76af-11eb-94f8-31755fea7d8a.png)
+참고 : https://www.zerocho.com/category/React/post/579b5ec26958781500ed9955  
+mongodb로부터 가져온 주식시장 정보를 바탕으로 CardStockMarket 컴포넌트를 출력한 내용이다. 우선 React 컴포넌트의 라이프사이클에 대한 간단한 설명을 하자면, 컴포넌트가 최초로 실행되면 mount된다고 표현한다. 이 대, context, defaultProps와 state를 저장한다. 그리고 **componentWillMount** 메소드가 호출된다. 이때는 컴포넌트가 DOM에 부착되기 전이므로 state나 props를 바꿔선 안된다. **render** 메소드를 통해 DOM에 부착된 후, **componentDidMount** 메소드가 호출된다. componentDidMount 메소드는 컴포넌트가 최초로 실행되고 DOM에 부착된 후에 실행되므로 각 컴포넌트가 생성된 후 최초 한번만 호출된다. 이때는 DOM에 부착되어 있는 상태이기 때문에 AJAX요청이나 setTimeout, setInterval과 같은 행동을 한다.  
+
+그리고 axios 모듈을 통해 react로부터 django 서버를 거쳐 mongodb에 있는 데이터를 요청해왔다. python의 requests 모듈과 같다고 생각하면 된다. ** 아직 원인은 파악하지 못했지만 render에서 axios를 통해 요청할 경우 2번씩 요청되는 현상이 발생했다. ** componentDidMount 라이프사이클에서 요청하자 이와같은 문제는 해결됬다.  
+```
+App.js 
+...
+
+  componentDidMount(){
+    console.log('im didmount!');
+    axios({
+      method : "get",
+      url : "http://127.0.0.1:8000/rest_api/market/"
+    })
+    .then(response => {
+      console.log(response);
+      let _markets = [];
+      response.data.forEach(element => {
+        // debugger;
+        let _id = element["id"];
+        let _name = element["stock_market_name"];
+        let market = <CardStockMarket name={_name}/>
+        _markets = _markets.concat(market);
+      });
+      console.log('hello', _markets);
+      this.setState({markets: _markets});
+    })
+    .catch(error => {
+      console.log("error", error);
+    })
+  }
+```
+setState를 함으로써 render를 한번더 유발시킨다. 이때 우리가 요청한 데이터를 토대로 카드를 화면에 출력하게 된다.
   
   
 - 종목별 주가 정보 조회 뷰 (List)  
