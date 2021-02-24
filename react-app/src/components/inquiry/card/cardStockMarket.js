@@ -16,7 +16,7 @@ class CardStockMarket extends Component {
                     
                 </CardHeader>
                 <CardContent>
-                    <Typography className="content">I'm {marketName}. </Typography>
+                    <Typography className="content">{marketName}</Typography>
                 </CardContent>
                 <CardActions>
                     <Button size="small">GO TO</Button>
