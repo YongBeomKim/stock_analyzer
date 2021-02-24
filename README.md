@@ -658,7 +658,6 @@ App.js
       console.log(response);
       let _markets = [];
       response.data.forEach(element => {
-        // debugger;
         let _id = element["id"];
         let _name = element["stock_market_name"];
         let market = <CardStockMarket name={_name}/>
