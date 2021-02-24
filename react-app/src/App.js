@@ -6,6 +6,7 @@ import axios from 'axios';
 class App extends Component{
 
   state = {
+    view: 'market',
     markets: []
   }
 
