@@ -1,5 +1,4 @@
 import ListStockMarket from './components/inquiry/list/listStockMarket';
-import CardStockMarket from './components/inquiry/card/cardStockMarket';
 import './App.css';
 import React, { Component } from 'react';
 

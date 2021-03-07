@@ -61,7 +61,7 @@ python manage.py startapp rest_api
 #### 1-2 모델 설계  
 - 사용자 정보 모델 (즐겨찾기 종목 포함)  
 
-```
+```python
 class Post(models.Model):
     user_name = models.CharField(max_length=200)
     # bookmark_item_list = models.CharField(max_length=200) # 연구중..
@@ -72,7 +72,7 @@ class Post(models.Model):
 
 - 주식시장 모델  
 
-```
+```python
 class StockMarket(models.Model):
     stock_market_name = models.CharField(max_length=200)
 
@@ -82,7 +82,7 @@ class StockMarket(models.Model):
 
 - 주식종목 모델  
 
-```
+```python
 class StockItem(models.Model):
     stock_market = models.ForeignKey(StockMarket, on_delete=models.CASCADE)
     stock_item_name = models.CharField(max_length=200)
@@ -109,7 +109,7 @@ pip install djangorestframework
 
 DRF를 설치한 후 settings.py에 다음과 같이 적어준다.  
 
-```
+```python
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -132,7 +132,7 @@ REST_FRAMEWORK = {
 
 rest_api앱에 urls.py를 생성한 뒤, 루트 urls.py에 다음과 같은 경로를 라우팅한다.  
 
-```
+```python
 urlpatterns = [
     ...
     path('rest_api/', include('rest_api.urls')),
@@ -141,7 +141,7 @@ urlpatterns = [
 
 rest_api의 models.py를 작성해보자.  
 
-```
+```python
 from django.db import models
 
 
@@ -176,7 +176,7 @@ class StockItem(models.Model):
 
 rest_api앱에 serializers.py를 작성해보자.  
 
-```
+```python
 from rest_framework import serializers
 from .models import StockUser, StockMarket, StockItem
 from django.contrib.auth.models import User
@@ -220,7 +220,7 @@ DRF View 종류
 
 rest_api/views.py  
 
-```
+```python
 from rest_framework import viewsets
 
 from .serializers import StockUserSerializer, StockMarketSerializer, StockItemSerializer
@@ -246,7 +246,7 @@ class StockItemViewSet(viewsets.ModelViewSet):
 url을 라우팅 시켜보자. viewset을 라우팅할 때에는 CBV, FBV, Mixin, GenericAPIView와는 다르게 router객체로 간편하게 등록할 수 있다.  
 rest_api/urls.py  
 
-```
+```python
 from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
@@ -341,7 +341,7 @@ $ pip install djongo
 
 5. 장고 프로젝트 내 settings.py 에 mongoDB 연동을 위한 코드 작성
 
-```
+```python
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
@@ -374,7 +374,7 @@ SECRET_KEY의 용도 -- [출처](https://docs.djangoproject.com/en/3.0/ref/setti
 Django 앱에는 암호화 서명이 필요한 많은 것들이 있으며 'SECRET_KEY' 설정이 그 열쇠라고 볼 수 있다. 해당 기밀 정보들을 다음과 같이 json 파일로 관리하여 따로 호출하게끔 변경한다.
 
 * secrets.json
-```
+```json
 {
     "SECRET_KEY": "your SECRET_KEY",
     "DB_HOST" : "your DB Host",
@@ -385,7 +385,7 @@ Django 앱에는 암호화 서명이 필요한 많은 것들이 있으며 'SECRE
 ```
 
 * settings.py
-```
+```python
 secret_file = os.path.join(BASE_DIR, 'secrets.json')
 
 with open(secret_file) as f:
@@ -406,7 +406,7 @@ SECRET_KEY = get_secret("SECRET_KEY")
 
 ### 3. PyKrx를 통한 데이터 수집
 #### 3-1 주식 종목 코드 수집
-```
+```python
 class StockItemCodeCollector:
     def __init__(self):
         self.markets = ['KOSPI', 'KOSDAQ', 'KONEX', 'ALL']
@@ -437,7 +437,7 @@ class StockItemCodeCollector:
 StockItemCodeCollector 인스턴스는 각 주식시장(KOSPI, KOSDAQ, KONEX, 전체)별로 딕셔너리에 각 종목의 이름과 코드를 보관하고 있다. get_code() 메소드를 통해 주식시장과 종목명을 입력하면 해당 종목 코드를 반환한다.  
 
 #### 3-2 주식 종목 데이터 수집
-```
+```python
 class StockItemDataFrameCollector:
     def __init__(self, code):
         self.code = code
@@ -458,7 +458,7 @@ StockItemDataFrameCollector 인스턴스는 생성자에서 어떤 종목의 정
 
 #### 3-3 DRF를 활용한 데이터 삽입 (CREATE)
 데이터 삽입을 위해 우선 django 모델의 포맷에 적합하도록 변환하는 과정을 진행했다.  
-```
+```python
 class Converter:
     @classmethod
     def convert_to_json_for_item(cls, df: DataFrame, market: int, company: str):
@@ -496,14 +496,14 @@ class Converter:
 ```  
 
 간단히 설명하자면 PyKrx를 통해 가져온 데이터프레임을 requests 모듈의 인자로 보낼 수 있도록 딕셔너리로 변환하는 작업이다. 그리고 requests 모듈의 get 요청은 원할했지만 post요청을 하자 403 에러가 나타나는 것을 알 수 있었다. 오류내용은 다음과 같았다.  
-```
+```python
 {
     "detail": "CSRF Failed: CSRF token missing or incorrect."
 }
 ```  
 
 결론부터 이야기 하면 이와 같은 오류가 나는 이유는 **로그인 세션**이 존재하지 않기 때문이다. 우리는 로그인 세션을 활성화하기 위한 토큰을 먼저 준비해야한다. (로그인을 위한 데이터라고 이해하면 쉽다.) 우선, 토큰을 통한 인증방식을 진행할 것이기 때문에 settings.py에서는 다음과 같이 설정해주어야 한다.  
-```
+```python
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -512,7 +512,7 @@ REST_FRAMEWORK = {
 ```  
 
 다음으로는 로그인 세션을 생성해야한다.  
-```
+```python
 class BaseReq:
     def __init__(self):
         self.url = 'http://127.0.0.1:8000/rest_api/'
@@ -536,7 +536,7 @@ class BaseReq:
 ```  
 
 그리고 지금부터는 requests 모듈이 아닌 self.client 객체 (즉, 현재 활성화된 로그인 세션)을 통해서 요청을 해야한다.  
-```
+```python
 class BaseCreate(BaseReq):
     def __init__(self):
         super().__init__()
@@ -567,7 +567,7 @@ CSRF는 무엇인가? CSRF는 Cross-site request forgery의 약자로 '사이트
 각 주식시장별 그래프를 띄우며, 해당 주식시장(코스피200, 코스닥150)의 종목별 주가 정보 조회 뷰로 접근할 수 있게 해준다.  
 무한스크롤형을 선택한 이유는 주식시장이 추가되는 경우를 고려한 것이다.  
 
-```
+```javascript
 import React, { Component } from 'react'
 import CardStockMarket from '../card/cardStockMarket'
 
@@ -600,7 +600,7 @@ class ListStockMarket extends Component {
 
 ```
 
-```
+```javascript
 // 리스트의 각 항목의 역할을 하는 카드 컴포넌트
 import React, { Component } from 'react'
 
@@ -616,8 +616,7 @@ class CardStockMarket extends Component {
         
         return (
             <Card className="root">
-                <CardHeader>
-                    
+                <CardHeader>  
                 </CardHeader>
                 <CardContent>
                     <Typography className="content">I'm {marketName}. </Typography>
@@ -635,17 +634,19 @@ class CardStockMarket extends Component {
 ```  
   
 
-2020.12.29. 각 주식시장을 표현할 카드 설계중   
+**2020.12.29**  
+각 주식시장을 표현할 카드 설계중   
 <img width="1440" alt="스크린샷 2020-12-29 오후 10 46 30" src="https://user-images.githubusercontent.com/32003817/103288259-d30da980-4a27-11eb-8a1c-fdfab8a6fe86.png">
 
-2021.02.24  
+**2021.02.24**  
 ![image](https://user-images.githubusercontent.com/32003817/108954001-750be400-76af-11eb-94f8-31755fea7d8a.png)
 참고 : https://www.zerocho.com/category/React/post/579b5ec26958781500ed9955  
 mongodb로부터 가져온 주식시장 정보를 바탕으로 CardStockMarket 컴포넌트를 출력한 내용이다. 우선 React 컴포넌트의 라이프사이클에 대한 간단한 설명을 하자면, 컴포넌트가 최초로 실행되면 mount된다고 표현한다. 이 대, context, defaultProps와 state를 저장한다. 그리고 **componentWillMount** 메소드가 호출된다. 이때는 컴포넌트가 DOM에 부착되기 전이므로 state나 props를 바꿔선 안된다. **render** 메소드를 통해 DOM에 부착된 후, **componentDidMount** 메소드가 호출된다. componentDidMount 메소드는 컴포넌트가 최초로 실행되고 DOM에 부착된 후에 실행되므로 각 컴포넌트가 생성된 후 최초 한번만 호출된다. 이때는 DOM에 부착되어 있는 상태이기 때문에 AJAX요청이나 setTimeout, setInterval과 같은 행동을 한다.  
 
 그리고 axios 모듈을 통해 react로부터 django 서버를 거쳐 mongodb에 있는 데이터를 요청해왔다. python의 requests 모듈과 같다고 생각하면 된다. **아직 원인은 파악하지 못했지만 render에서 axios를 통해 요청할 경우 2번씩 요청되는 현상이 발생했다.** componentDidMount 라이프사이클에서 요청하자 이와같은 문제는 해결됬다.  
-```
-App.js 
+```javascript
+// App.js 
+
 ...
 
   componentDidMount(){
@@ -671,7 +672,85 @@ App.js
     })
   }
 ```
-setState를 함으로써 render를 한번더 유발시킨다. 이때 우리가 요청한 데이터를 토대로 카드를 화면에 출력하게 된다.
+setState를 함으로써 render를 한번더 유발시킨다. 이때 우리가 요청한 데이터를 토대로 카드를 화면에 출력하게 된다.  
+
+**2021.03.07**  
+```javascript
+// App.js
+
+class App extends Component{
+
+  state = {
+    view_mode: 'market',
+  }
+
+  constructor(props){
+    super(props);
+  }
+
+  // shouldComponentUpdate(){
+  // }
+
+  render(){
+    let template = null;
+    if (this.state.view_mode == 'market') {
+      template = <ListStockMarket/>;
+    }
+
+    return (
+      <div className="App">
+        {template}
+      </div>
+    );
+  }
+}
+```
+
+```javascript
+// listStockMarket.js
+
+class ListStockMarket extends Component {
+    state = {
+        markets: []
+      }
+    
+    constructor(props){
+    super(props);
+    }
+
+    render(){
+        return (
+          <div id="grid">
+            <ul className="stockMarkets">
+              {this.state.markets}
+            </ul>
+          </div>
+        );
+      }
+    
+    componentDidMount(){
+    axios({
+        method : "get",
+        url : "http://127.0.0.1:8000/rest_api/market/"
+    })
+    .then(response => {
+        console.log(response);
+        let _markets = [];
+        response.data.forEach(element => {
+        let _id = element["id"];
+        let _name = element["stock_market_name"];
+        let market = <CardStockMarket name={_name}/>
+        _markets = _markets.concat(market);
+        });
+        this.setState({markets: _markets});
+    })
+    .catch(error => {
+        console.log("error", error);
+    })
+    }
+}
+```
+App.js 의 App 클래스에 view_mode 속성을 지닌 state를 세팅함으로써 상황에따라 동적으로 보여질 컴포넌트를 렌더링할 것이다. 기존의 로직은 listStockList.js로 옮기면서 구조를 리팩토링했다.
   
   
 - 종목별 주가 정보 조회 뷰 (List)  
