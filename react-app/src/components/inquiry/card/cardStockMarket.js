@@ -13,7 +13,6 @@ class CardStockMarket extends Component {
         return (
             <Card className="root">
                 <CardHeader>
-                    
                 </CardHeader>
                 <CardContent>
                     <Typography className="content">{marketName}</Typography>
