@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 class App extends Component{
 
   state = {
-    view_mode: 'market',
+    view_mode: 'market_list',
   }
 
   constructor(props){
@@ -18,8 +18,11 @@ class App extends Component{
 
   render(){
     let template = null;
-    if (this.state.view_mode == 'market') {
+    if (this.state.view_mode == 'market_list') {
       template = <ListStockMarket/>;
+    }
+    else if (this.state.view_mode == 'item_list') {
+      
     }
 
     return (
