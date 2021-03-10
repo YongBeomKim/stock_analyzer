@@ -18,7 +18,7 @@ class CardStockMarket extends Component {
                     <Typography className="content">{marketName}</Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small">GO TO</Button>
+                    <Button size="small" onClick={this.props.onChangeState}>GO TO</Button>
                 </CardActions>
             </Card>
         );
