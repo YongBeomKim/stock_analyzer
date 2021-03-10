@@ -15,11 +15,18 @@ class App extends Component{
 
   // shouldComponentUpdate(){
   // }
-
+  
   render(){
     let template = null;
     if (this.state.view_mode == 'market_list') {
-      template = <ListStockMarket/>;
+        // template = <ListStockMarket onChangeState={this.setViewMode().bind(this)}/>;
+        template = <ListStockMarket onChangeState={function(){
+          this.setState(
+            {view_mode : 'item_list'}
+          );
+        }.bind(this)
+      }
+      />;
     }
     else if (this.state.view_mode == 'item_list') {
       
@@ -31,6 +38,12 @@ class App extends Component{
       </div>
     );
   }
+
+  // setViewMode(){
+  //   this.setState(
+  //     { view_mode : 'item_list' }
+  //   )
+  // }
 }
 
 export default App;
