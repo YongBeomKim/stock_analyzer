@@ -32,7 +32,7 @@ class ListStockMarket extends Component {
         response.data.forEach(element => {
         let _id = element["id"];
         let _name = element["stock_market_name"];
-        let market = <CardStockMarket name={_name}/>
+        let market = <CardStockMarket name={_name} onChangeState={this.props.onChangeState}/>
         _markets = _markets.concat(market);
         });
         this.setState({markets: _markets});
