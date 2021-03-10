@@ -1,39 +1,33 @@
-import CardStockMarket from './components/inquiry/card/cardStockMarket';
+import ListStockMarket from './components/inquiry/list/listStockMarket';
 import './App.css';
 import React, { Component } from 'react';
-import axios from 'axios';
+
 
 class App extends Component{
+
+  state = {
+    view_mode: 'market_list',
+  }
+
   constructor(props){
     super(props);
   }
 
+  // shouldComponentUpdate(){
+  // }
+
   render(){
-    axios({
-      method : "get",
-      url : "http://127.0.0.1:8000/rest_api/market/"
-    })
-    .then(response => {
-      console.log(response);
-      let stockMarkets = {};
-      response.data.forEach(element => {
-        console.log(element["id"]);
-        console.log(element["stock_market_name"]);
-      });
-    })
-    .catch(error => {
-      console.log("error", error);
-    })
+    let template = null;
+    if (this.state.view_mode == 'market_list') {
+      template = <ListStockMarket/>;
+    }
+    else if (this.state.view_mode == 'item_list') {
+      
+    }
+
     return (
-      // <div className="App" style={style}>
-      <div id="grid">
-        <ul className="stockMarkets">
-          <CardStockMarket></CardStockMarket>
-          <CardStockMarket></CardStockMarket>
-          <CardStockMarket></CardStockMarket>
-          <CardStockMarket></CardStockMarket>
-          <CardStockMarket></CardStockMarket>
-        </ul>
+      <div className="App">
+        {template}
       </div>
     );
   }
