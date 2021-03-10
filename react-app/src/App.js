@@ -39,6 +39,7 @@ class App extends Component{
     );
   }
 
+  // 해당 메소드를 static 하게 정의해야함. (방법 찾아보기)
   // setViewMode(){
   //   this.setState(
   //     { view_mode : 'item_list' }
