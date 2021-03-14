@@ -752,7 +752,25 @@ class ListStockMarket extends Component {
 ```
 App.js 의 App 클래스에 view_mode 속성을 지닌 state를 세팅함으로써 상황에따라 동적으로 보여질 컴포넌트를 렌더링할 것이다. 기존의 로직은 listStockList.js로 옮기면서 구조를 리팩토링했다.
   
-  
+**2021.03.14**
+이번 시간에는 주식시장에 해당하는 주식종목만 가져오는 것이 목표이다. 그러나 http://127.0.0.1:8000/rest_api/item/ url로 GET 요청을 보내면 조건에 관계없이 종목을 전부 가져오는 불상사가 일어난다. 그래서 우리는 특정 조건을 설정해줄 필요가 있다.  
+
+```python
+class StockItemViewSet(viewsets.ModelViewSet):
+    queryset = StockItem.objects.all()
+    serializer_class = StockItemSerializer
+
+    def get_queryset(self):
+        reg_date = self.request.query_params.get('reg_date', None)  # 쿼리스트링
+        if reg_date is not None:
+            self.queryset = self.queryset.filter(reg_date=reg_date)
+        return self.queryset
+```
+위 코드는 viewset으로 구현된 요청 url에 쿼리스트링을 받아 모델로부터 해당하는 데이터만 queryset으로 반환한다. 테스트로 등록일자만 쿼리해보았다.  
+![image](https://user-images.githubusercontent.com/32003817/111063782-f529aa80-84f3-11eb-9312-37b39e857e12.png)
+
+
+
 - 종목별 주가 정보 조회 뷰 (List)  
 현재 시점 해당 주식시장의 여러 종목의 주가를 조회 가능.  
 해당 종목에 하이퍼링크를 달아 상세 정보 조회 뷰로 넘어갈 수 있게 한다.  
