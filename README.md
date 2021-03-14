@@ -752,7 +752,7 @@ class ListStockMarket extends Component {
 ```
 App.js 의 App 클래스에 view_mode 속성을 지닌 state를 세팅함으로써 상황에따라 동적으로 보여질 컴포넌트를 렌더링할 것이다. 기존의 로직은 listStockList.js로 옮기면서 구조를 리팩토링했다.
   
-**2021.03.14**
+**2021.03.14**  
 이번 시간에는 주식시장에 해당하는 주식종목만 가져오는 것이 목표이다. 그러나 http://127.0.0.1:8000/rest_api/item/ url로 GET 요청을 보내면 조건에 관계없이 종목을 전부 가져오는 불상사가 일어난다. 그래서 우리는 특정 조건을 설정해줄 필요가 있다.  
 
 ```python
