@@ -769,8 +769,6 @@ class StockItemViewSet(viewsets.ModelViewSet):
 위 코드는 viewset으로 구현된 요청 url에 쿼리스트링을 받아 모델로부터 해당하는 데이터만 queryset으로 반환한다. 테스트로 등록일자만 쿼리해보았다.  
 ![image](https://user-images.githubusercontent.com/32003817/111063782-f529aa80-84f3-11eb-9312-37b39e857e12.png)
 
-
-
 - 종목별 주가 정보 조회 뷰 (List)  
 현재 시점 해당 주식시장의 여러 종목의 주가를 조회 가능.  
 해당 종목에 하이퍼링크를 달아 상세 정보 조회 뷰로 넘어갈 수 있게 한다.  
