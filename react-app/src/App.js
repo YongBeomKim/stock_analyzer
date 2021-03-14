@@ -1,4 +1,5 @@
 import ListStockMarket from './components/inquiry/list/listStockMarket';
+import ListStockItem from './components/inquiry/list/listStockItem';
 import './App.css';
 import React, { Component } from 'react';
 
@@ -29,7 +30,13 @@ class App extends Component{
       />;
     }
     else if (this.state.view_mode == 'item_list') {
-      
+      template = <ListStockItem onChangeState={
+        function(){
+          this.setState(
+            {view_mode : 'item_detail'}
+          );
+        }.bind(this)
+      }/>;
     }
 
     return (
