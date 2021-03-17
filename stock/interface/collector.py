@@ -5,7 +5,31 @@ from pykrx import stock
 from pandas import DataFrame, Series
 from datetime import datetime, timedelta
 
+from interface.req_interface import ReadMarketReq
+from interface.req_interface import ReadItemListReq
+from interface.req_interface import ReadItemReq
+
+from interface.req_interface import CreateMarketReq
+from interface.req_interface import CreateItemListReq
 from interface.req_interface import CreateItemReq
+
+
+class StockItemListCollector:
+    def __init__(self):
+        self.stock = stock
+
+    def save_market_code_name(self, date, market):
+        item_codes = stock.get_market_ticker_list(date, market=market)
+        for item_code in item_codes:
+            item_name = stock.get_market_ticker_name(item_code)
+            item_code = int(item_code)
+            data = {
+                        "stock_item_name": item_name,
+                        "stock_item_code": item_code,
+                        "stock_market_name": market
+                    }
+            req = CreateItemListReq()
+            req.set_param(data)
 
 
 class StockItemCodeCollector:

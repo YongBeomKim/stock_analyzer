@@ -43,10 +43,9 @@ class BaseCreate(BaseReq):
 
     @csrf_exempt
     def send_post(self):
-        for datum in self.data:
-            res = self.client.post(self.url, json=datum)  # self.client(현재 활성화된 로그인 세션)를 사용한 요청
-            res = self._ret(res)
-            print(res, datum)
+        res = self.client.post(self.url, json=self.data)  # self.client(현재 활성화된 로그인 세션)를 사용한 요청
+        res = self._ret(res)
+        print(res, datum)
 
 
 class BaseRead(BaseReq):
@@ -85,7 +84,57 @@ class BaseDelete(BaseReq):
         res = self.client.delete(self.url)
         return self._ret(res)
 
+class CreateMarketReq(BaseCreate):
+    def __init__(self):
+        super().__init__()
+        self.url += 'market/'
 
+
+# 주식시장
+class ReadMarketReq(BaseRead):
+    def __init__(self):
+        super().__init__()
+        self.url += 'market/'
+
+
+class UpdateMarketReq(BaseUpdate):
+    def __init__(self):
+        super().__init__()
+        self.url += 'market/'
+
+
+class DeleteMarketReq(BaseDelete):
+    def __init__(self):
+        super().__init__()
+        self.url += 'market/'
+
+
+# 주식종목
+class CreateItemListReq(BaseCreate):
+    def __init__(self):
+        super().__init__()
+        self.url += 'item_list/'
+
+
+class ReadItemListReq(BaseRead):
+    def __init__(self, stock_market_name):
+        super().__init__()
+        self.url += ('item_list/?stock_market_name=' + stock_market_name)
+
+
+class UpdateItemListReq(BaseUpdate):
+    def __init__(self):
+        super().__init__()
+        self.url += 'item_list/'
+
+
+class DeleteItemListReq(BaseDelete):
+    def __init__(self):
+        super().__init__()
+        self.url += 'item_list/'
+
+
+# 주식종목 데이터
 class CreateItemReq(BaseCreate):
     def __init__(self):
         super().__init__()
