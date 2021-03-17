@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import StockUser
 from .models import StockMarket
+from .models import StockItemList
 from .models import StockItem
 from django.contrib.auth.models import User
 
@@ -20,6 +21,12 @@ class StockUserSerializer(serializers.ModelSerializer):
 class StockMarketSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockMarket
+        fields = '__all__'
+
+
+class StockItemListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StockItemList
         fields = '__all__'
 
 
