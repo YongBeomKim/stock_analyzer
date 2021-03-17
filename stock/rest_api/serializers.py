@@ -1,9 +1,11 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
+
 from .models import StockUser
 from .models import StockMarket
 from .models import StockItemList
 from .models import StockItem
-from django.contrib.auth.models import User
+
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -47,15 +47,19 @@ class StockItemListViewSet(viewsets.ModelViewSet):
     queryset = StockItemList.objects.all()
     serializer_class = StockItemListSerializer
 
+    def get_queryset(self):
+        stock_market_name = self.request.query_params.get('stock_market_name', None)
+        if stock_market_name is not None:
+            self.queryset = self.queryset.filter(stock_market_name=stock_market_name)
+        return self.queryset
+
 
 class StockItemViewSet(viewsets.ModelViewSet):
     queryset = StockItem.objects.all()
     serializer_class = StockItemSerializer
 
     def get_queryset(self):
-        # itemname = self.request.query_params.get('itemname', None)
-        reg_date = self.request.query_params.get('reg_date', None)
-        if reg_date is not None:
-            # queryset = queryset.filter(stock_item_name=itemname)
-            self.queryset = self.queryset.filter(reg_date=reg_date)
+        stock_item_name = self.request.query_params.get('stock_item_name', None)
+        if stock_item_name is not None:
+            self.queryset = self.queryset.filter(stock_item_name=stock_item_name)
         return self.queryset

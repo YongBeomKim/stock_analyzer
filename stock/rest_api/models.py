@@ -11,15 +11,15 @@ class StockUser(models.Model):
 
 
 class StockMarket(models.Model):
-    stock_market_name = models.CharField(max_length=200)
+    stock_market_name = models.CharField(primary_key=True, max_length=200)
 
     def __str__(self):
         return self.stock_market_name
 
 
 class StockItemList(models.Model):
-    stock_market = models.ForeignKey(StockMarket, on_delete=models.CASCADE)
-    stock_item_name = models.CharField(max_length=200)
+    stock_market_name = models.ForeignKey(StockMarket, on_delete=models.CASCADE)
+    stock_item_name = models.CharField(primary_key=True, max_length=200)
 
     def __str__(self):
         return self.stock_item_name
@@ -33,3 +33,4 @@ class StockItem(models.Model):
     open = models.FloatField(default=0.0)
     close = models.FloatField(default=0.0)
     volume = models.FloatField(default=0.0)
+
