@@ -74,28 +74,34 @@ class Post(models.Model):
 
 ```python
 class StockMarket(models.Model):
-    stock_market_name = models.CharField(max_length=200)
+    stock_market_name = models.CharField(primary_key=True, max_length=200)
 
     def __str__(self):
         return self.stock_market_name
+```
+
+- 주식종목 목록 모델
+```python
+class StockItemList(models.Model):
+    stock_market_name = models.ForeignKey(StockMarket, on_delete=models.CASCADE)
+    stock_item_name = models.CharField(primary_key=True, max_length=200)
+    stock_item_code = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.stock_item_name
 ```
 
 - 주식종목 모델  
 
 ```python
 class StockItem(models.Model):
-    stock_market = models.ForeignKey(StockMarket, on_delete=models.CASCADE)
-    stock_item_name = models.CharField(max_length=200)
-    reg_date = models.DateTimeField(default=timezone.now(), null=True)
+    stock_item_name = models.ForeignKey(StockItemList, on_delete=models.CASCADE)
+    reg_date = models.DateField(default=timezone.now(), null=True)
     high = models.FloatField(default=0.0)
     low = models.FloatField(default=0.0)
     open = models.FloatField(default=0.0)
     close = models.FloatField(default=0.0)
     volume = models.FloatField(default=0.0)
-    adj_close = models.FloatField(default=0.0)
-
-    def __str__(self):
-        return self.stock_item_name
 ```
 
 #### 1-3. REST API 구현 (DRF 적용)  
@@ -139,36 +145,6 @@ urlpatterns = [
 ]
 ```  
 
-rest_api의 models.py를 작성해보자.  
-
-```python
-from django.db import models
-
-
-# Create your models here.
-class StockUser(models.Model):
-    user_name = models.CharField(max_length=200)
-    # bookmark_item_list = models.CharField(max_length=200) # 연구중..
-
-    def __str__(self):
-        return self.user_name
-
-
-class StockMarket(models.Model):
-    stock_market_name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.stock_market_name
-
-
-class StockItem(models.Model):
-    stock_market = models.ForeignKey(StockMarket, on_delete=models.CASCADE)
-    stock_item_name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.stock_item_name
-```  
-
 그 다음 해당 모델을 serialize해야 한다.  
 그 이유는 Django ORM의 Queryset은 Context로써 Django template으로 넘겨지며, HTML로 렌더링되어 Response로 보내지게 된다.
 하지만 **JSON으로 데이터를 보내야 하는 RESTful API**는 HTML로 렌더링 되는 Django template를 사용할 수 없다. 그래서 Queryset을 Nested한 JSON
@@ -178,8 +154,13 @@ rest_api앱에 serializers.py를 작성해보자.
 
 ```python
 from rest_framework import serializers
-from .models import StockUser, StockMarket, StockItem
 from django.contrib.auth.models import User
+
+from .models import StockUser
+from .models import StockMarket
+from .models import StockItemList
+from .models import StockItem
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -197,6 +178,12 @@ class StockUserSerializer(serializers.ModelSerializer):
 class StockMarketSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockMarket
+        fields = '__all__'
+
+
+class StockItemListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StockItemList
         fields = '__all__'
 
 
@@ -221,10 +208,21 @@ DRF View 종류
 rest_api/views.py  
 
 ```python
-from rest_framework import viewsets
+from django.http import HttpResponse
+from django.shortcuts import render
 
-from .serializers import StockUserSerializer, StockMarketSerializer, StockItemSerializer
-from .models import StockUser, StockMarket, StockItem
+from rest_framework import viewsets 
+
+from .serializers import StockUserSerializer
+from .serializers import StockMarketSerializer
+from .serializers import StockItemListSerializer
+from .serializers import StockItemSerializer
+
+
+from .models import StockUser
+from .models import StockMarket
+from .models import StockItemList
+from .models import StockItem
 
 
 # Create your views here.
@@ -238,9 +236,27 @@ class StockMarketViewSet(viewsets.ModelViewSet):
     serializer_class = StockMarketSerializer
 
 
+class StockItemListViewSet(viewsets.ModelViewSet):
+    queryset = StockItemList.objects.all()
+    serializer_class = StockItemListSerializer
+
+    def get_queryset(self):
+        stock_market_name = self.request.query_params.get('stock_market_name', None)
+        if stock_market_name is not None:
+            self.queryset = self.queryset.filter(stock_market_name=stock_market_name)
+        return self.queryset
+
+
 class StockItemViewSet(viewsets.ModelViewSet):
     queryset = StockItem.objects.all()
     serializer_class = StockItemSerializer
+
+    def get_queryset(self):
+        stock_item_name = self.request.query_params.get('stock_item_name', None)
+        if stock_item_name is not None:
+            self.queryset = self.queryset.filter(stock_item_name=stock_item_name)
+        return self.queryset
+
 ```  
 
 url을 라우팅 시켜보자. viewset을 라우팅할 때에는 CBV, FBV, Mixin, GenericAPIView와는 다르게 router객체로 간편하게 등록할 수 있다.  
@@ -251,13 +267,19 @@ from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 
-from .views import StockUserViewSet, StockMarketViewSet, StockItemViewSet
+from .views import StockUserViewSet
+from .views import StockMarketViewSet
+from .views import StockItemListViewSet
+from .views import StockItemViewSet
 
 router_user = DefaultRouter()
 router_user.register('user', StockUserViewSet)
 
 router_market = DefaultRouter()
 router_market.register('market', StockMarketViewSet)
+
+router_item_list = DefaultRouter()
+router_item_list.register('item_list', StockItemListViewSet)
 
 router_item = DefaultRouter()
 router_item.register('item', StockItemViewSet)
@@ -267,6 +289,7 @@ urlpatterns = [
 
     path('', include(router_user.urls)),
     path('', include(router_market.urls)),
+    path('', include(router_item_list.urls)),
     path('', include(router_item.urls)),
 ]
 ```  
