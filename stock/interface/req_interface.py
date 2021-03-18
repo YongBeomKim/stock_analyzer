@@ -45,7 +45,7 @@ class BaseCreate(BaseReq):
     def send_post(self):
         res = self.client.post(self.url, json=self.data)  # self.client(현재 활성화된 로그인 세션)를 사용한 요청
         res = self._ret(res)
-        print(res, datum)
+        return res
 
 
 class BaseRead(BaseReq):
